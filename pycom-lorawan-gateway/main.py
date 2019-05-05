@@ -1,8 +1,9 @@
 """ LoPy LoRaWAN Nano Gateway example usage """
 
+
 import config
 from nanogateway import NanoGateway
-
+print("HELLO")
 if __name__ == '__main__':
     nanogw = NanoGateway(
         id=config.GATEWAY_ID,
