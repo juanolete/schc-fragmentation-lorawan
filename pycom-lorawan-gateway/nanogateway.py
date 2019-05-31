@@ -104,6 +104,7 @@ class NanoGateway:
         self.txnb = 0
 
         self.sf = self._dr_to_sf(self.datarate)
+        self._log('Spread Factor setted to: {}', self.sf)
         self.bw = self._dr_to_bw(self.datarate)
 
         self.stat_alarm = None
@@ -218,6 +219,7 @@ class NanoGateway:
     def _dr_to_bw(self, dr):
         bw = dr[-5:]
         if bw == 'BW125':
+            print('BW125')
             return LoRa.BW_125KHZ
         elif bw == 'BW250':
             return LoRa.BW_250KHZ
@@ -243,6 +245,7 @@ class NanoGateway:
             self.rxnb += 1
             self.rxok += 1
             rx_data = self.lora_sock.recv(256)
+            print(rx_data)
             stats = lora.stats()
             packet = self._make_node_packet(rx_data, self.rtc.now(), stats.rx_timestamp, stats.sfrx, self.bw, stats.rssi, stats.snr)
             packet = self.frequency_rounding_fix(packet, self.frequency)
