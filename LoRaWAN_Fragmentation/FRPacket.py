@@ -1,6 +1,7 @@
 import math
 from os import urandom
-from FRCommon import *
+from FRCommon import FRModes as Modes
+from FRCommon import lsb_mask
 from FRTile import FRTile as Tile
 from uCRC32 import CRC32
 
@@ -39,11 +40,11 @@ class FRPacket:
             return
 
     def get_tiles(self, profile, tile_len):
-        if profile.mode == FRConstants.NO_ACK:
+        if profile.mode == Modes.NO_ACK:
             self.no_ack_get_tiles(tile_len, profile.l2_word_size)
-        elif profile.mode == FRConstants.ALWAYS_ACK:
+        elif profile.mode == Modes.ALWAYS_ACK:
             self.always_ack_get_tiles(tile_len, profile.l2_word_size)
-        elif profile.mode == FRConstants.ACK_ON_ERROR:
+        elif profile.mode == Modes.ACK_ON_ERROR:
             self.ack_on_error_get_tiles(tile_len, profile.penultimate_tile_smaller, profile.l2_word_size)
         return
 

@@ -143,7 +143,7 @@ class FREngine:
             return
 
         if profile.fragmentation:
-            fragments_creator = FragmentEngine(profile, rule_id, d_tag)
+            fragment_creator = FragmentEngine(profile, rule_id, d_tag)
             self.packet.get_tiles(profile, FRCommon.DR_AUS915[self.DR])
 
             # send windows

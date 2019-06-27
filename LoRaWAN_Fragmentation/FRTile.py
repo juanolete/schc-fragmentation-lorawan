@@ -1,5 +1,6 @@
 from bitstring import Bits
 
+
 class FRTile:
     def __init__(self, length):
         self.bytes = []
@@ -25,4 +26,3 @@ class FRTile:
             new_tile = Bits(uint=self.bytes[index], length=self.length[index])
             tile += new_tile
         return tile
-

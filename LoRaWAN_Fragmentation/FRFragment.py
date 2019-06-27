@@ -1,5 +1,10 @@
 from bitstring import Bits
+from FRBitmap import FRBitmap as Bitmap
+from FRTile import FRTile as Tile
 from FRCommon import *
+from FRCommon import FRMessages as Messages
+# REVISAR PYTEST
+
 
 
 class FRFragmentEngine:
@@ -18,7 +23,7 @@ class FRFragmentEngine:
         return
 
     # Create Regular Fragment message
-    def create_regular_fragment(self, tile, window=0, fcn_number=0):
+    def create_regular_fragment(self, tile: Tile, window=0, fcn_number=0):
 
         rid = Bits(uint=self.rule_id, length=self.rule_id_size)
         dtag = Bits(0)
@@ -36,7 +41,7 @@ class FRFragmentEngine:
         return fragment
 
     # Create SCHC All-1 fragment message
-    def create_all_1_fragment(self, tile, mic_value, window=0):
+    def create_all_1_fragment(self, tile: Tile, mic_value, window=0):
 
         rid = Bits(uint=self.rule_id, length=self.rule_id_size)
         dtag = Bits(0)
@@ -60,7 +65,7 @@ class FRFragmentEngine:
         return fragment
 
     # Create SCHC ACK
-    def create_ack(self, window=0, bitmap=0):
+    def create_ack(self, bitmap: Bitmap, window=0):
         rid = Bits(uint=self.rule_id, length=self.rule_id_size)
         dtag = Bits(0)
         if self.dtag_size > 0:
@@ -70,21 +75,23 @@ class FRFragmentEngine:
             w = Bits(uint=window & lsb_mask[self.w_size], length=self.w_size)
             header_size += self.w_size
             # Calculate C bit and Compressed Bitmap
-            compressed_bitmap = None
-            compressed_bitmap_size = None
-            if bitmap != lsb_mask[self.WINDOW_SIZE]:  # Si Bitmap != 0b111...1
+            if bitmap.get_value() != lsb_mask[self.WINDOW_SIZE]:  # Si Bitmap != 0b111...1
                 c = Bits(uint=0, length=1)
-
-                # ####Falta calcular compressed Bitmap y size ####
-                header_size += compressed_bitmap_size
-                comp_bmp = Bits(uint=compressed_bitmap, length=compressed_bitmap_size)
-
-                # Padding calculation
                 padding = Bits(0)
                 pad_bits = padding_bits(header_size, self.l2_word_size)
-                if pad_bits > 0:
-                    padding = Bits(uint=0, length=pad_bits)
-
+                if pad_bits > bitmap.size:
+                    comp_bmp = Bits(uint=bitmap.get_value(), length=bitmap.size)
+                    padding = Bits(uint=0, length=pad_bits-bitmap.size)
+                elif pad_bits == bitmap.size:
+                    comp_bmp = Bits(uint=bitmap.get_value(), length=bitmap.size)
+                else:
+                    msb_to_take = bitmap.get_msb_to_take()
+                    if msb_to_take <= pad_bits:
+                        comp_bmp = Bits(uint=bitmap.get_value_msb(pad_bits), length=pad_bits)
+                    else:
+                        comp_bmp = Bits(uint=bitmap.get_value(), length=bitmap.size)
+                        pad_bits = padding_bits(header_size+bitmap.size, self.l2_word_size)
+                        padding = Bits(uint=0, length=pad_bits)
                 fragment = rid + dtag + w + c + comp_bmp + padding
                 return fragment
 
@@ -194,3 +201,135 @@ class FRFragmentEngine:
             w_size = self.w_size
 
         return self.rule_id_size + self.dtag_size + w_size + self.fcn_size
+
+    def sender_message_recovery(self, fragment: bytes):
+        fragment_bits_left = len(fragment) * 8
+        octet_bits_left = 8
+        octet_index = 0
+
+        # headers declaration
+        rid = None
+        dtag = None
+        w = None
+        c = None
+        comp_bmp = None
+
+        # Take Rule ID
+        rid, fragment_bits_left, octet_index, octet_bits_left = take_field_from_fragment(self.rule_id_size,
+                                                                                         fragment,
+                                                                                         fragment_bits_left,
+                                                                                         octet_index,
+                                                                                         octet_bits_left)
+        # Take DTag
+        if self.dtag_size > 0:
+            dtag, fragment_bits_left, octet_index, octet_bits_left = take_field_from_fragment(self.dtag_size,
+                                                                                              fragment,
+                                                                                              fragment_bits_left,
+                                                                                              octet_index,
+                                                                                              octet_bits_left)
+        # Take W
+        if self.use_windows > 0:
+            w, fragment_bits_left, octet_index, octet_bits_left = take_field_from_fragment(self.w_size,
+                                                                                           fragment,
+                                                                                           fragment_bits_left,
+                                                                                           octet_index,
+                                                                                           octet_bits_left)
+        # Take C
+        c, fragment_bits_left, octet_index, octet_bits_left = take_field_from_fragment(1,
+                                                                                       fragment,
+                                                                                       fragment_bits_left,
+                                                                                       octet_index, octet_bits_left)
+        # Take compressed bitmap and message type
+        message_type = None
+        if c.get_bits().int:  # Si c=1
+            if fragment_bits_left == 0:
+                message_type = Messages.ACK
+            else:
+                aux_byte = fragment[octet_index] & lsb_mask[octet_bits_left]
+                if aux_byte == 0:
+                    message_type = Messages.ACK
+                else:
+                    message_type = Messages.RECEIVER_ABORT
+        else:  # Si c=0
+            message_type = Messages.ACK
+            # Buscar compressed bitmap
+            if fragment_bits_left <= self.WINDOW_SIZE:
+                comp_bmp, fragment_bits_left, octet_index, octet_bits_left = take_field_from_fragment(
+                    fragment_bits_left, fragment, fragment_bits_left, octet_index, octet_bits_left)
+            else:
+                comp_bmp, fragment_bits_left, octet_index, octet_bits_left = take_field_from_fragment(
+                    self.WINDOW_SIZE, fragment, fragment_bits_left, octet_index, octet_bits_left)
+
+        headers = [rid, dtag, w, c, comp_bmp]
+        return message_type, headers
+
+    def receiver_message_recovery(self, fragment: bytes):
+        fragment_bits_left = len(fragment) * 8
+        octet_bits_left = 8
+        octet_index = 0
+
+        # Headers declaration
+        rid = None
+        dtag = None
+        w = None
+        fcn = None
+        mic = None
+        payload = None
+
+        # Take Rule ID
+        rid, fragment_bits_left, octet_index, octet_bits_left = take_field_from_fragment(self.rule_id_size,
+                                                                                         fragment,
+                                                                                         fragment_bits_left,
+                                                                                         octet_index,
+                                                                                         octet_bits_left)
+        # Take DTag
+        if self.dtag_size > 0:
+            dtag, fragment_bits_left, octet_index, octet_bits_left = take_field_from_fragment(self.dtag_size,
+                                                                                              fragment,
+                                                                                              fragment_bits_left,
+                                                                                              octet_index,
+                                                                                              octet_bits_left)
+        # Take W
+        if self.use_windows > 0:
+            w, fragment_bits_left, octet_index, octet_bits_left = take_field_from_fragment(self.w_size,
+                                                                                           fragment,
+                                                                                           fragment_bits_left,
+                                                                                           octet_index,
+                                                                                           octet_bits_left)
+        # Take FCN
+        fcn, fragment_bits_left, octet_index, octet_bits_left = take_field_from_fragment(self.fcn_size,
+                                                                                         fragment,
+                                                                                         fragment_bits_left,
+                                                                                         octet_index, octet_bits_left)
+
+        if fragment_bits_left < 8:  # Lo que queda es padding
+            if fcn.get_bits().all(False) is True:
+                message_type = Messages.ACK_REQUEST
+            elif fcn.get_bits().all(True) is True:
+                message_type = Messages.SENDER_ABORT
+        else:
+            if fcn.get_bits().all(True) is True:
+                message_type = Messages.ALL1
+                # Take MIC
+                mic, fragment_bits_left, octet_index, octet_bits_left = take_field_from_fragment(self.mic_size,
+                                                                                                 fragment,
+                                                                                                 fragment_bits_left,
+                                                                                                 octet_index,
+                                                                                                 octet_bits_left)
+                # Take Payload
+                payload, fragment_bits_left, octet_index, octet_bits_left = take_field_from_fragment(fragment_bits_left,
+                                                                                                     fragment,
+                                                                                                     fragment_bits_left,
+                                                                                                     octet_index,
+                                                                                                     octet_bits_left)
+            else:
+                message_type = Messages.REGULAR
+                # Take Payload
+                payload, fragment_bits_left, octet_index, octet_bits_left = take_field_from_fragment(fragment_bits_left,
+                                                                                                     fragment,
+                                                                                                     fragment_bits_left,
+                                                                                                     octet_index,
+                                                                                                     octet_bits_left)
+
+        headers = [rid, dtag, w, fcn, mic, payload]
+        return message_type, headers

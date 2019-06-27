@@ -1,5 +1,4 @@
-import FRCommon
-from FRCommon import FRConstants as Constant
+from FRCommon import FRModes as Modes
 
 
 class FRProfile:
@@ -33,21 +32,21 @@ class FRProfile:
 
         return
 
-    def select_fragmentation_mode(self, mode, inactivity_timer = 12*3600, max_ack_requests=10,
+    def select_fragmentation_mode(self, mode, inactivity_timer=12*3600, max_ack_requests=10,
                                   window_size=7, penultimate_tile_smaller=False):
         self.mode = mode
         self.WINDOW_SIZE = window_size
         self.inactivity_timer = inactivity_timer
         self.MAX_ACK_REQUESTS = max_ack_requests
-        if mode == Constant.NO_ACK:
+        if mode == Modes.NO_ACK:
             self.use_windows = False
             self.penultimate_tile_smaller = False
 
-        if mode == Constant.ALWAYS_ACK:
+        if mode == Modes.ALWAYS_ACK:
             self.use_windows = True
             self.penultimate_tile_smaller = False
 
-        if mode == Constant.ACK_ON_ERROR:
+        if mode == Modes.ACK_ON_ERROR:
             self.use_windows = True
             self.penultimate_tile_smaller = penultimate_tile_smaller
 
@@ -60,4 +59,3 @@ class FRProfile:
     def disable_fragmentation(self):
         self.fragmentation = False
         return
-
