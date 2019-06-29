@@ -3,12 +3,9 @@ from FRBitmap import FRBitmap as Bitmap
 from FRTile import FRTile as Tile
 from FRCommon import *
 from FRCommon import FRMessages as Messages
-# REVISAR PYTEST
-
 
 
 class FRFragmentEngine:
-
     def __init__(self, profile, rule_id, dtag):
         self.l2_word_size = profile.l2_word_size
         self.rule_id_size = profile.rule_id_size
@@ -124,9 +121,9 @@ class FRFragmentEngine:
             w_size = self.w_size
         fcn = Bits(uint=0, length=self.fcn_size)
 
-        header_size = self.rule_id + self.dtag_size + w_size + self.fcn_size
+        header_size = self.rule_id_size + self.dtag_size + w_size + self.fcn_size
 
-        # Padding calculation
+        # Padding Calculation
         padding = Bits(0)
         pad_bits = padding_bits(header_size, self.l2_word_size)
         if pad_bits > 0:

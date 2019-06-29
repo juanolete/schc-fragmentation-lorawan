@@ -1,8 +1,11 @@
 import math
 from os import urandom
+from bitstring import Bits
 from FRCommon import FRModes as Modes
 from FRCommon import lsb_mask
+from FRCommon import take_field_from_fragment
 from FRTile import FRTile as Tile
+from FRProfile import FRProfile as Profile
 from uCRC32 import CRC32
 
 
@@ -39,7 +42,7 @@ class FRPacket:
             self.MIC = CRC32().calc(self.packet + self.packet_padding)
             return
 
-    def get_tiles(self, profile, tile_len):
+    def get_tiles(self, profile: Profile, tile_len: int):
         if profile.mode == Modes.NO_ACK:
             self.no_ack_get_tiles(tile_len, profile.l2_word_size)
         elif profile.mode == Modes.ALWAYS_ACK:
@@ -48,8 +51,15 @@ class FRPacket:
             self.ack_on_error_get_tiles(tile_len, profile.penultimate_tile_smaller, profile.l2_word_size)
         return
 
+    def no_ack_get_tiles(self, tile_len, l2_size=8):
+        self.always_ack_get_tiles(tile_len, l2_size)
+        return
+
+    def ack_on_error_get_tiles(self, tile_len, penultimate_tile_small=False, l2_size=8):
+        return
+
     def always_ack_get_tiles(self, tile_len, l2_size=8):
-        packet_bits = len(self.packet) * 8
+        packet_bits = len(self.packet)*8
         max_tiles = 0
         # Get number of tiles
         if tile_len < l2_size:
@@ -59,47 +69,32 @@ class FRPacket:
             if packet_bits % tile_len > 0:
                 remainder_tile = 1
             max_tiles = math.floor(packet_bits / tile_len) + remainder_tile
-        # Create tiles
+        # Get tiles
         packet_bits_left = packet_bits
         all_tiles = []
-        # Estado incial, all_tiles vacio, tile vacia, indice 0
-        tile = Tile(tile_len)  # Se crea nueva Tile con un espacio libre de [tile_len] bits
-        octet_bits_left = 8  # Se pueden tomar los 8bits
+        tile = None
+        octet_bits_left = 8
         octet_index = 0
         while packet_bits_left > 0:
-            if tile.emptyBits >= 8:
-                if octet_bits_left == 8:
-                    tile.add_byte(self.packet[octet_index], octet_bits_left)
-                else:
-                    # auxByte = bytes_to_int(packet[octet_index]) & lsb_mask[octet_bits_left]
-                    # tile.addByte(bytes([auxByte]), octet_bits_left)
-                    aux_byte = self.packet[octet_index] & lsb_mask[octet_bits_left]
-                    tile.add_byte(aux_byte, octet_bits_left)
-                packet_bits_left -= octet_bits_left
-                octet_bits_left = 8
-                octet_index += 1
-            else:
-                taken_bits = tile.emptyBits
-                # auxByte = (bytes_to_int(packet[octet_index])) >> (8 - takenBits)
-                # tile.addByte(bytes([auxByte]), takenBits)
-                aux_byte = self.packet[octet_index] >> (8 - taken_bits)
-                tile.add_byte(aux_byte, taken_bits)
-                packet_bits_left -= taken_bits
-                octet_bits_left -= taken_bits
-            if tile.emptyBits == 0 and packet_bits_left > 0:
-                all_tiles.append(tile)
-                tile = Tile(tile_len)
-        # Append the last tile
-        all_tiles.append(tile)
+            tile, packet_bits_left, octet_index, octet_bits_left = take_field_from_fragment(tile_len,
+                                                                                            self.packet,
+                                                                                            packet_bits_left,
+                                                                                            octet_index,
+                                                                                            octet_bits_left)
+            all_tiles.append(tile)
         if len(all_tiles) != max_tiles:
             print("## Error in number of Tiles created")
         else:
             self.tiles = all_tiles
+            print("## Tiles created")
+        return max_tiles
+
+    def construct_from_tiles(self, all_tiles):
+        tiles_number = len(all_tiles)
+        packet = Bits(0)
+        for tiles_index in range(0, tiles_number):
+            packet += all_tiles[tiles_index].get_bits()
+        self.packet = packet.tobytes()
+        self.tiles = all_tiles
         return
 
-    def no_ack_get_tiles(self, tile_len, l2_size=8):
-        self.always_ack_get_tiles(tile_len, l2_size)
-        return
-
-    def ack_on_error_get_tiles(self, tile_len, penultimate_tile_small=False, l2_size=8):
-        return

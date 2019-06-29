@@ -93,8 +93,7 @@ class FREngine:
             max_fragment_size = FRCommon.DR_AUS915[self.DR]*8  # Return size in Bits
             tile_len = max_fragment_size - regular_header_size  # Return size in Bits
             # Get the tiles with the specific tile length and calculate the padding bits and MIC
-            self.packet.get_tiles(profile, tile_len)
-            fragments_number = len(self.packet.tiles)
+            fragments_number = self.packet.get_tiles(profile, tile_len)
             pad_bits = fragment_engine.last_tile_padding(self.packet.tiles[fragments_number-1])
             self.packet.set_padding(pad_bits)
             self.packet.calculate_mic(profile)
