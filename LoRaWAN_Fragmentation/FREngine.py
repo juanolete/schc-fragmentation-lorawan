@@ -79,12 +79,7 @@ class FREngine:
         """
 
         self.fragments = []
-        profile = None
-        if rule_id in self.id_profiles:
-            profile = self.id_profiles[rule_id]
-        if profile is None:
-            print("Rule ID selected doesn't have a Profile linked")
-            return
+        profile = self.id_profiles[rule_id]
         if profile.fragmentation:
             # Create Fragments Engine object
             fragment_engine = FragmentEngine(profile, rule_id, d_tag)
@@ -109,45 +104,27 @@ class FREngine:
                 fcn = profile.WINDOW_SIZE
                 # Crear Regular fragments
                 for tile_index in range(0, fragments_number-1):
-                    fragment = fragment_engine.create_regular_fragment(self.packet.tiles[tile_index], window, fcn)
-                    self.fragments.append(fragment)
-                    fcn -= 1
                     if fcn < 0:
                         window += 1
                         fcn = profile.WINDOW_SIZE
+                    fragment = fragment_engine.create_regular_fragment(self.packet.tiles[tile_index], window, fcn)
+                    self.fragments.append(fragment)
+                    fcn -= 1
                 # Crear All-1 fragment
-                fragment = fragment_engine.create_all_1_fragment(self.packet.tiles[fragments_number-1], window,
-                                                                 self.packet.MIC)
+                fragment = fragment_engine.create_all_1_fragment(self.packet.tiles[fragments_number-1], self.packet.MIC,
+                                                                 window)
                 self.fragments.append(fragment)
-                return
             else:
                 # Crear Regular fragments
                 for tile_index in range(0, fragments_number-1):
-                    fragment = fragment_engine.create_regular_fragment((self.packet.tiles[tile_index]))
+                    fragment = fragment_engine.create_regular_fragment(self.packet.tiles[tile_index])
                     self.fragments.append(fragment)
                 # Crear All-1 fragment
                 fragment = fragment_engine.create_all_1_fragment(self.packet.tiles[fragments_number-1], self.packet.MIC)
                 self.fragments.append(fragment)
-                return
         else:
             self.fragments = [self.packet.get_packet()]
-            return
-
-    def send(self, rule_id, d_tag):
-        profile = None
-        if rule_id in self.id_profiles:
-            profile = self.id_profiles[rule_id]
-        else:
-            print("Rule ID selected doesn't have a Profile linked")
-            return
-
-        if profile.fragmentation:
-            fragment_creator = FragmentEngine(profile, rule_id, d_tag)
-            self.packet.get_tiles(profile, FRCommon.DR_AUS915[self.DR])
-
-            # send windows
-        else:
-            pass
-            # send packet
+        print("## All Fragments Created")
         return
+
 

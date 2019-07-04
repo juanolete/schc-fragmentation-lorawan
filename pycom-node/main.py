@@ -1,20 +1,15 @@
 from network import LoRa
 import socket
-import time
 import ubinascii
 import struct
-from ubitstring import Bits as bits
-
-import FREngine
-
+import time
+from os import urandom
 
 
+# LORA_FREQUENCY = 916800000
+LORA_FREQUENCY = 915200000
+LORA_NODE_DR = 4
 
-###############################################################################
-############################# LoRa Basic Send #################################
-###############################################################################
-
-'''
 def lora_event_callback(lora):
     print('lora_event_callback(): called')
     try:
@@ -28,113 +23,96 @@ def lora_event_callback(lora):
         print('lora_event_callback(): Exception')
 
 # Initialise LoRa in LORAWAN mode.
-lora = LoRa(mode=LoRa.LORAWAN, region=LoRa.AU915, frequency=916800000, sf=12,)
-
-for channel in range(0, 72):
-    lora.add_channel(channel, frequency=916800000, dr_min=0, dr_max=0)
-
-# create an OTAA authentication parameters
-dev_eui = ubinascii.unhexlify('70B3D5499F71073F')
-app_eui = ubinascii.unhexlify('70B3D57ED001AFEB')
-app_key = ubinascii.unhexlify('281B44C0085F372EB4B21FAA71B82113')
-
-# join a network using OTAA (Over the Air Activation)
-lora.join(activation=LoRa.OTAA, auth=(dev_eui, app_eui, app_key), timeout=0)
+# Australia = LoRa.AU915
+lora = LoRa(mode=LoRa.LORAWAN, region=LoRa.AU915, device_class=LoRa.CLASS_C)
 
 # create an ABP authentication params
-dev_addr = struct.unpack(">l", ubinascii.unhexlify('260318D0'))[0]
-nwk_swkey = ubinascii.unhexlify('DB2B131BAB37459ABD872695306CECA9')
-app_swkey = ubinascii.unhexlify('4DB274AA49361A18C4457AEFBB1B5E1B')
+dev_addr = struct.unpack(">l", ubinascii.unhexlify('26031557'))[0]
+nwk_swkey = ubinascii.unhexlify('009224952FFC444E6BF34C3CE2A55E06')
+app_swkey = ubinascii.unhexlify('136FAB6D34FF450ABD17979D3A6F9836')
 
+# create an OTA authentication params
+dev_eui = ubinascii.unhexlify('70B3D54998EA22BD')
+app_eui = ubinascii.unhexlify('70B3D57ED001AFEB')
+app_key = ubinascii.unhexlify('910CA83663E227DDB7244B77F6620313')
+
+for channel in range(0, 72):
+    lora.remove_channel(channel)
+
+lora.add_channel(0, frequency=LORA_FREQUENCY, dr_min=0, dr_max=5)
+
+# prepare_channels(lora, 64, 3)
 # join a network using ABP (Activation By Personalization)
 lora.join(activation=LoRa.ABP, auth=(dev_addr, nwk_swkey, app_swkey))
-lora.callback(trigger=LoRa.TX_PACKET_EVENT,handler=lora_event_callback)
+
+# join a netowkr uisng OTAA
+# lora.join(activation=LoRa.OTAA, auth=(dev_eui, app_eui, app_key))
+
+# set Tx callback
+# lora.callback(trigger=LoRa.RX_PACKET_EVENT ,handler=lora_event_callback)
+
+# remove all the non-default channels
+for i in range(1, 16):
+    lora.remove_channel(i)
 
 # wait until the module has joined the network
 while not lora.has_joined():
     time.sleep(2.5)
-    print('Not yet joined...')
+    print('main(): Not joined yet...')
 
-print('Network joined!')
+print('main(): Network joined!')
 
 # create a LoRa socket
 s = socket.socket(socket.AF_LORA, socket.SOCK_RAW)
 
 # set the LoRaWAN data rate
-s.setsockopt(socket.SOL_LORA, socket.SO_DR, 0)
-#s.setsockopt(socket.SOL_LORA, socket.SO_CONFIRMED, True)
-print('Setseckopt OK')
+s.setsockopt(socket.SOL_LORA, socket.SO_DR, LORA_NODE_DR)
+
+# s.setsockopt(socket.SOL_LORA, socket.SO_CONFIRMED, True)
+print('main(): Setsockopt OK')
 
 # make the socket blocking
 # (waits for the data to be sent and for the 2 receive windows to expire)
-#s.setblocking(True)
-
-# send some data
-uno = bits(uint = 10, length = 8)
-dos = bits(uint = 5, length = 8)
-tres = bits(uint = 8, length = 8)
-data = uno + dos + tres
-print(data)
-
-try:
-    s.setblocking(True)
-    s.send(data.tobytes())
-    print('Send OK')
-
-except OSError as e:
-    print(e.args[0])
-
-
-while True:
-    s.setblocking(True)
-    
-    a = bytes([0x01, 0x02, 0x03])
-    s.send(a)
-    s.setblocking(False)
-    #data = s.recv(255)
-    #print(data)
-    time.sleep(2)
+# s.setblocking(True)
 
 # make the socket non-blocking
 # (because if there's no data received it will block forever...)
+s.setblocking(False)
 
+time.sleep(4)
 
-# get any data received (if any...)
+##############################################################################
+# Preparing Data
 
-'''
-
-
-
-
-
-###############################################################################
-################################ FRAGMENTATION ################################
-###############################################################################
-
-###################
-#TESTS
-###################
-
-import FRConstants
-import FRPacket
-import FRProfile
-import FRRuleId
-import FRFragment
-import FRWindow
-
-from FRConstants import *
+from bitstring import Bits
 from FRPacket import FRPacket as Packet
-from FRProfile import FRProfile as Profile
-from FRRuleId import FRRuleID as RuleId
-from FRFragment import FRFragment as Fragment
-from FRWindow import FRWindow as Window
+packet_len = 1380  # bytes
+tile_len = 216 * 8
+tst_packet = Packet()
+tst_packet.random_generate(packet_len)
+tst_packet.always_ack_get_tiles(tile_len)
 
-engine = FREngine()
-profile = Profile()
-ruleId = RuleId(1, profile)
-packet = Packet()
-engine.initilialize()
-engine.set_profile(profile)
-engine.set_ruleId(ruleId)
-engine.set_packet(packet)
-engine.begin_fragmentation()
+message_bits = tst_packet.tiles[0].get_bits()
+print("Message: ", message_bits.hex)
+#############################################################################################
+
+# send some data
+try:
+    # s.send(bytes([0x01, 0x02, 0x03]))
+    s.send(message_bits.tobytes())
+    print('main(): Send OK')
+    time.sleep(4)
+    rx, port = s.recvfrom(256)
+    if rx:
+        print('Received: {}, on port {}'.format(rx, port))
+    time.sleep(6)
+except OSError as e:
+    print('ERROR')
+    print(e.args[0])
+    # if e.args[0] == 11:
+'''
+# get any data received (if any...)
+data = s.recv(256)
+print(data)
+'''
+print("END")

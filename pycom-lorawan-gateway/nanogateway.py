@@ -8,6 +8,7 @@ import uos
 import usocket
 import utime
 import _thread
+import pycom
 from micropython import const
 from network import LoRa
 from network import WLAN
@@ -104,9 +105,11 @@ class NanoGateway:
         self.txnb = 0
 
         self.sf = self._dr_to_sf(self.datarate)
-        self._log('Spread Factor setted to: {}', self.sf)
-        self.bw = self._dr_to_bw(self.datarate)
+        # self._log('Spread Factor setted to: {}', self.sf)
 
+        self.bw = self._dr_to_bw(self.datarate)
+        # self._log('Band With setted to: {}', self.bw)
+        
         self.stat_alarm = None
         self.pull_alarm = None
         self.uplink_alarm = None
@@ -159,6 +162,8 @@ class NanoGateway:
 
         # initialize the LoRa radio in LORA mode
         self._log('Setting up the LoRa radio at {} Mhz using {}', self._freq_to_float(self.frequency), self.datarate)
+        self.bw = LoRa.BW_125KHZ
+        self._log('SF: {}', self.sf)
         self.lora = LoRa(
             mode=LoRa.LORA,
             frequency=self.frequency,
@@ -167,6 +172,7 @@ class NanoGateway:
             preamble=8,
             coding_rate=LoRa.CODING_4_5,
             tx_iq=True
+            # region=LoRa.AU915
         )
 
         # create a raw LoRa socket
@@ -176,6 +182,8 @@ class NanoGateway:
 
         self.lora.callback(trigger=(LoRa.RX_PACKET_EVENT | LoRa.TX_PACKET_EVENT), handler=self._lora_cb)
         self._log('LoRaWAN nano gateway online')
+        pycom.rgbled(0x05A2FF)  # blue
+
 
     def stop(self):
         """
@@ -219,7 +227,6 @@ class NanoGateway:
     def _dr_to_bw(self, dr):
         bw = dr[-5:]
         if bw == 'BW125':
-            print('BW125')
             return LoRa.BW_125KHZ
         elif bw == 'BW250':
             return LoRa.BW_250KHZ
@@ -242,6 +249,7 @@ class NanoGateway:
 
         events = lora.events()
         if events & LoRa.RX_PACKET_EVENT:
+            pycom.rgbled(0x00ff00)  # green
             self.rxnb += 1
             self.rxok += 1
             rx_data = self.lora_sock.recv(256)
@@ -252,6 +260,7 @@ class NanoGateway:
             self._push_data(packet)
             self._log('Received packet: {}', packet)
             self.rxfw += 1
+            pycom.rgbled(0x05A2FF)  # blue
         if events & LoRa.TX_PACKET_EVENT:
             self.txnb += 1
             lora.init(
@@ -344,7 +353,7 @@ class NanoGateway:
         """
         Transmits a downlink message over LoRa.
         """
-
+        pycom.rgbled(0xff0000)  # red
         self.lora.init(
             mode=LoRa.LORA,
             frequency=frequency,
@@ -364,8 +373,10 @@ class NanoGateway:
             datarate,
             data
         )
+        pycom.rgbled(0x05A2FF)  # blue
 
     def _send_down_link_class_c(self, data, datarate, frequency):
+        pycom.rgbled(0xff0000)  # red
         self.lora.init(
             mode=LoRa.LORA,
             frequency=frequency,
@@ -385,6 +396,7 @@ class NanoGateway:
             datarate,
             data
         )
+        pycom.rgbled(0x0000ff)  # blue
 
     def _udp_thread(self):
         """

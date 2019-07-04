@@ -26,8 +26,8 @@ class FRPacket:
     def get_packet(self):
         return self.packet
 
-    def random_generate(self, length):
-        self.packet = urandom(length)
+    def random_generate(self, length_in_bytes):
+        self.packet = urandom(length_in_bytes)
         return
 
     def set_padding(self, bits):
@@ -93,7 +93,7 @@ class FRPacket:
         tiles_number = len(all_tiles)
         packet = Bits(0)
         for tiles_index in range(0, tiles_number):
-            packet += all_tiles[tiles_index].get_bits()
+            packet = packet + all_tiles[tiles_index].get_bits()
         self.packet = packet.tobytes()
         self.tiles = all_tiles
         return

@@ -32,9 +32,3 @@ print("FRAGMENT REASSEMBLED: ",r_fragment.bin)
 
 assert fragment == r_fragment
 
-a = Bits(bin='11111')
-b = Bits(bin='00000')
-
-assert a.all(True) is True
-assert b.all(False) is True
-

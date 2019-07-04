@@ -1,36 +1,100 @@
+import math
+from os import urandom
+from bitstring import Bits
+from FRCommon import FRModes as Modes
+from FRCommon import lsb_mask
+from FRCommon import take_field_from_fragment
+from FRTile import FRTile as Tile
+from FRProfile import FRProfile as Profile
+from uCRC32 import CRC32
+
+
 class FRPacket:
 
-    def __init__(self, packet = None):
-        if packet == None:
-            self._packet = self._new_random_packet()
+    def __init__(self):
+        self.packet = None
+        self.tiles = None
+        self.packet_padding = None
+        self.last_tile_padding = None
+        self.MIC = None
+        return
+
+    def set_packet(self, packet):
+        self.packet = packet
+        return
+
+    def get_packet(self):
+        return self.packet
+
+    def random_generate(self, length):
+        self.packet = urandom(length)
+        return
+
+    def set_padding(self, bits):
+        self.last_tile_padding = bits
+        if bits == 0:
+            self.packet_padding = bytes(0)
         else:
-            self._packet = packet
-        
-        self._tiles = None #
-        self._windows = None
+            self.packet_padding = bytes(1)
+
+    def calculate_mic(self, profile):
+        if profile.mic_algo == 'CRC32':
+            self.MIC = CRC32().calc(self.packet + self.packet_padding)
+            return
+
+    def get_tiles(self, profile: Profile, tile_len: int):
+        if profile.mode == Modes.NO_ACK:
+            self.no_ack_get_tiles(tile_len, profile.l2_word_size)
+        elif profile.mode == Modes.ALWAYS_ACK:
+            self.always_ack_get_tiles(tile_len, profile.l2_word_size)
+        elif profile.mode == Modes.ACK_ON_ERROR:
+            self.ack_on_error_get_tiles(tile_len, profile.penultimate_tile_smaller, profile.l2_word_size)
         return
 
-    def _new_random_packet(self):
+    def no_ack_get_tiles(self, tile_len, l2_size=8):
+        self.always_ack_get_tiles(tile_len, l2_size)
         return
-    
-        
 
+    def ack_on_error_get_tiles(self, tile_len, penultimate_tile_small=False, l2_size=8):
+        return
 
-'''
-    def get_tiles(self, largo_tile):
-        self._tiles = []
-        tile = []
-        # verificar si el tamaño de packet es multiplo del tamaño de tile
-        if bitsPacket.length % tileLengthBits > 0:
-            # no es multiplo -> agregar padding
-            padding = tileLengthBits - bitsPacket.length % tileLengthBits
-            bitsPacketPadding = bitsPacket + Bits(padding)
-        initIndex = 0
-        finalIndex = tileLengthBits
-        paddedPacketLength = bitsPacketPadding.length
-        while finalIndex <= paddedPacketLength:
-            tile = bitsPacketPadding[initIndex:finalIndex]
-            tiles.append(tile)
-            initIndex += tileLengthBits
-            finalIndex += tileLengthBits
-        return tiles, padding
+    def always_ack_get_tiles(self, tile_len, l2_size=8):
+        packet_bits = len(self.packet)*8
+        max_tiles = 0
+        # Get number of tiles
+        if tile_len < l2_size:
+            print("## Tile length must be equal or greater than L2 size word =", l2_size)
+        else:
+            remainder_tile = 0
+            if packet_bits % tile_len > 0:
+                remainder_tile = 1
+            max_tiles = math.floor(packet_bits / tile_len) + remainder_tile
+        # Get tiles
+        packet_bits_left = packet_bits
+        all_tiles = []
+        tile = None
+        octet_bits_left = 8
+        octet_index = 0
+        while packet_bits_left > 0:
+            tile, packet_bits_left, octet_index, octet_bits_left = take_field_from_fragment(tile_len,
+                                                                                            self.packet,
+                                                                                            packet_bits_left,
+                                                                                            octet_index,
+                                                                                            octet_bits_left)
+            all_tiles.append(tile)
+        if len(all_tiles) != max_tiles:
+            print("## Error in number of Tiles created")
+        else:
+            self.tiles = all_tiles
+            print("## Tiles created")
+        return max_tiles
+
+    def construct_from_tiles(self, all_tiles):
+        tiles_number = len(all_tiles)
+        packet = Bits(0)
+        for tiles_index in range(0, tiles_number):
+            packet = packet + all_tiles[tiles_index].get_bits()
+        self.packet = packet.tobytes()
+        self.tiles = all_tiles
+        return
+

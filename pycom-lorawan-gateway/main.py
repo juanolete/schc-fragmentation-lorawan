@@ -2,8 +2,11 @@
 
 
 import config
+import pycom
 from nanogateway import NanoGateway
-print("HELLO")
+
+pycom.heartbeat(False)
+
 if __name__ == '__main__':
     nanogw = NanoGateway(
         id=config.GATEWAY_ID,
