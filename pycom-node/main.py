@@ -96,6 +96,8 @@ message_bits = tst_packet.tiles[0].get_bits()
 print("Message: ", message_bits.hex)
 #############################################################################################
 
+data = bytes([1,2,3,4])
+
 # send some data
 try:
     # s.send(bytes([0x01, 0x02, 0x03]))
