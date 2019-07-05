@@ -180,6 +180,7 @@ class NanoGateway:
 
         # create a raw LoRa socket
         self.lora_sock = usocket.socket(usocket.AF_LORA, usocket.SOCK_RAW)
+        self.lora_sock.bind(1)
         self.lora_sock.setblocking(False)
         self.lora_tx_done = False
 

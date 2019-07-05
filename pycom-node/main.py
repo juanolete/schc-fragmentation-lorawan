@@ -27,12 +27,12 @@ def lora_event_callback(lora):
 lora = LoRa(mode=LoRa.LORAWAN, region=LoRa.AU915, device_class=LoRa.CLASS_C)
 
 # create an ABP authentication params
-dev_addr = struct.unpack(">l", ubinascii.unhexlify('26031557'))[0]
-nwk_swkey = ubinascii.unhexlify('009224952FFC444E6BF34C3CE2A55E06')
-app_swkey = ubinascii.unhexlify('136FAB6D34FF450ABD17979D3A6F9836')
+dev_addr = struct.unpack(">l", ubinascii.unhexlify('260314F5'))[0]
+nwk_swkey = ubinascii.unhexlify('25E66430DF07DCE2C2359BF37C64ADE7')
+app_swkey = ubinascii.unhexlify('0D762F6ED62B7DB90FE627793EB0898D')
 
 # create an OTA authentication params
-dev_eui = ubinascii.unhexlify('70B3D54998EA22BD')
+dev_eui = ubinascii.unhexlify('0076C3944D466714')
 app_eui = ubinascii.unhexlify('70B3D57ED001AFEB')
 app_key = ubinascii.unhexlify('910CA83663E227DDB7244B77F6620313')
 
@@ -101,6 +101,7 @@ data = bytes([1,2,3,4])
 # send some data
 try:
     # s.send(bytes([0x01, 0x02, 0x03]))
+    print("Message: ", message_bits.tobytes())
     s.send(message_bits.tobytes())
     print('main(): Send OK')
     time.sleep(4)
