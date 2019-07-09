@@ -1,6 +1,7 @@
 from FRPacket import FRPacket as Packet
 from FRFragment import FRFragmentEngine as FragmentEngine
 from FRProfile import FRProfile
+from math import ceil
 import FRCommon
 
 
@@ -24,13 +25,14 @@ class FREngine:
     """
     def __init__(self):
         self.DR = None
-        self.id_profiles = None
+        self.id_profiles = {}
         self.packet = None
         self.fragments = None
         self.msg_counter = 0
+        self.is_sender = None
         return
 
-    def initialize(self, data_rate: int):
+    def initialize(self, data_rate=None, packet=None):
         """
         Initialize the object with the (Rule ID : Profile) mapping empty and th DR value
         :param data_rate:
@@ -38,7 +40,13 @@ class FREngine:
         """
 
         self.DR = data_rate
-        self.id_profiles = {}
+        if packet is not None:
+            self.packet = Packet()
+            self.packet.set_packet(packet)
+        return
+
+    def set_dr(self, data_rate):
+        self.DR = data_rate
         return
 
     def set_packet(self, packet: bytes):
@@ -68,7 +76,7 @@ class FREngine:
         return
 
     # Create all tiles and fragments
-    def _compute_packet(self, rule_id: int, d_tag: int):
+    def compute_packet(self, rule_id: int, d_tag: int):
         """
         Function that creates the SCHC Fragments depending on the Profile information, the Rule ID and the DTag value
         It creates the SCHC Regular Fragments depending on the use of windows
@@ -125,6 +133,16 @@ class FREngine:
         else:
             self.fragments = [self.packet.get_packet()]
         print("## All Fragments Created")
-        return
+        if (profile.use_windows is not None) and (profile.use_windows == True):
+            windows_number = ceil(len(self.fragments)/profile.WINDOW_SIZE)
+            return windows_number
+        else:
+            windows_number = 1
+            return windows_number
+
+    def send(self, rule_id: int, d_tag: int, lora_socket):
+        profile = self.id_profiles[rule_id]
+        if profile.mode == FRCommon.FRModes.ALWAYS_ACK:
+            self._send_always_ack(rule_id, d_tag, lora_socket)
 
 

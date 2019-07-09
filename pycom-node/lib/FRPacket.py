@@ -26,8 +26,8 @@ class FRPacket:
     def get_packet(self):
         return self.packet
 
-    def random_generate(self, length):
-        self.packet = urandom(length)
+    def random_generate(self, length_in_bytes):
+        self.packet = urandom(length_in_bytes)
         return
 
     def set_padding(self, bits):

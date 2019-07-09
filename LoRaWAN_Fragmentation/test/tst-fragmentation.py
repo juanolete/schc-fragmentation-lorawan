@@ -1,8 +1,9 @@
 from FRProfile import FRProfile as Profile
 from FREngine import *
-from FRCommon import *
+import math
 from os import urandom
-
+from FRBitmap import FRBitmap as Bitmap
+from bitstring import Bits
 # Parameters for test
 rule_id = 0
 packet_len = 1000
@@ -16,36 +17,45 @@ profile.enable_fragmentation()
 # Packet generator
 packet = urandom(1000)
 
-LoRa_DR = 7
+LoRa_DR = 0
 frag_engine = FREngine()
-frag_engine.initialize(DR=LoRa_DR)
 frag_engine.add_profile(rule_id, profile)
-frag_engine.set_packet(packet)
-# frag_engine.send(rule_id, d_tag)
-# frag_engine.print_stats()
+frag_engine.initialize(data_rate=LoRa_DR, packet=packet)
+windows_number = frag_engine.compute_packet(rule_id, d_tag)
+print("N° Windows: ", windows_number)
 
-print("Calculating paddin")
-print(padding_bits(9,8))
-print(padding_bits(10,8))
-print(padding_bits(11,8))
-print(padding_bits(12,8))
-print(padding_bits(13,8))
-print(padding_bits(14,8))
-print(padding_bits(15,8))
-print(padding_bits(16,8))
-print(padding_bits(17,8))
-print(padding_bits(18,8))
-print(padding_bits(19,8))
-print(padding_bits(20,8))
-print(padding_bits(21,8))
-print(padding_bits(22,8))
-print(padding_bits(23,8))
-print(padding_bits(24,8))
-print(padding_bits(25,8))
-print(padding_bits(26,8))
-print(padding_bits(27,8))
 
-print(lsb_mask[7])
+def _send_window(fragments, init_index, window_size, bitmap: Bitmap):
+    if window_size != bitmap.size:
+        print("## Bitmap size do not correspond with WINDOW_SIZE")
+        return
+    fragments_number = len(fragments)
+    fragment_index = init_index
+    reversed_bitmap = bitmap.bitmap[::-1]
+    for index in range(0, bitmap.size):
+        if fragment_index >= fragments_number:
+            return fragment_index
+        else:
+            fragment_sent = reversed_bitmap[index]
+            if not fragment_sent:
+                print("Enviando fragmento: ", fragment_index)
+                # Send fragment_index
+                bitmap.set_bit_by_sent_order(index, True)
+                # sleep
+                pass
+            fragment_index += 1
+    return fragment_index
+
+bmp = Bitmap(profile.WINDOW_SIZE)
+bmp.set_bit_by_sent_order(2, True)
+bmp.set_bit_by_sent_order(4, True)
+print(bmp.bitmap)
+_send_window(frag_engine.fragments, 0, profile.WINDOW_SIZE, bmp)
+
+print(bmp.bitmap)
+def _send_last_window(fragments, init_index, window_size):
+    pass
+
 
 
 

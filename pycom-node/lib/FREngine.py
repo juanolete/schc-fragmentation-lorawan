@@ -24,13 +24,14 @@ class FREngine:
     """
     def __init__(self):
         self.DR = None
-        self.id_profiles = None
+        self.id_profiles = {}
         self.packet = None
         self.fragments = None
         self.msg_counter = 0
+        self.is_sender = None
         return
 
-    def initialize(self, data_rate: int):
+    def initialize(self, data_rate=None, packet=None):
         """
         Initialize the object with the (Rule ID : Profile) mapping empty and th DR value
         :param data_rate:
@@ -38,7 +39,13 @@ class FREngine:
         """
 
         self.DR = data_rate
-        self.id_profiles = {}
+        if packet is not None:
+            self.packet = Packet()
+            self.packet.set_packet(packet)
+        return
+
+    def set_dr(self, data_rate):
+        self.DR = data_rate
         return
 
     def set_packet(self, packet: bytes):
@@ -127,14 +134,4 @@ class FREngine:
         print("## All Fragments Created")
         return
 
-    def send(self, rule_id, d_tag):
-        profile = None
-        if rule_id in self.id_profiles:
-            profile = self.id_profiles[rule_id]
-        if profile is None:
-            print("Rule ID selected doesn't have a Profile linked")
-            return
-        self._compute_packet(rule_id, d_tag)
-
-        return
 

@@ -18,12 +18,14 @@ def lora_event_callback(lora):
             print("lora_event_callback(): Packet sent")
         if events & LoRa.RX_PACKET_EVENT:
             print("lora_event_callback(): Packet received")
-            print(s.recv(64))
+            rx, port = s.recvfrom(256)
+            if rx:
+                print('Received: {}, on port {}'.format(rx, port))
     except Exception:
         print('lora_event_callback(): Exception')
 
 # Initialise LoRa in LORAWAN mode.
-# Australia = LoRa.AU915
+# Chile = LoRa.AU915
 lora = LoRa(mode=LoRa.LORAWAN, region=LoRa.AU915, device_class=LoRa.CLASS_C)
 
 # create an ABP authentication params
@@ -41,7 +43,6 @@ for channel in range(0, 72):
 
 lora.add_channel(0, frequency=LORA_FREQUENCY, dr_min=0, dr_max=5)
 
-# prepare_channels(lora, 64, 3)
 # join a network using ABP (Activation By Personalization)
 lora.join(activation=LoRa.ABP, auth=(dev_addr, nwk_swkey, app_swkey))
 
@@ -49,7 +50,7 @@ lora.join(activation=LoRa.ABP, auth=(dev_addr, nwk_swkey, app_swkey))
 # lora.join(activation=LoRa.OTAA, auth=(dev_eui, app_eui, app_key))
 
 # set Tx callback
-# lora.callback(trigger=LoRa.RX_PACKET_EVENT ,handler=lora_event_callback)
+# lora.callback(trigger=LoRa.RX_PACKET_EVENT|LoRa.TX_PACKET_EVENT, handler=lora_event_callback)
 
 # remove all the non-default channels
 for i in range(1, 16):
@@ -94,21 +95,82 @@ tst_packet.always_ack_get_tiles(tile_len)
 
 message_bits = tst_packet.tiles[0].get_bits()
 print("Message: ", message_bits.hex)
+print("\n")
 #############################################################################################
 
-data = bytes([1,2,3,4])
-
 # send some data
+
+def _send_bits_uplink(socket: socket, data: Bits): 
+    print("## Sending msg: ", data.hex)
+    socket.send(data.tobytes())
+
+def _receive_downlink(socket: socket):
+    rx, port = socket.recvfrom(256)
+    if rx:
+        print("Received: {}, on port {}".format(rx,port))
+    return rx
+
+TX_WAIT = 5
+RX_WAIT = 4
+
 try:
     # s.send(bytes([0x01, 0x02, 0x03]))
     print("Message: ", message_bits.tobytes())
-    s.send(message_bits.tobytes())
+    print("\n")
+
+    print("Sending 1")
+
+    _send_bits_uplink(s, message_bits)
+    #s.send(message_bits.tobytes())
+    time.sleep(RX_WAIT)
+    rx = _receive_downlink(s)
+    if rx: 
+        print(rx)
+    time.sleep(TX_WAIT)
+
+    print("Sending 2")
+    #s.send(tst_packet.tiles[1].get_bits().tobytes())
+    _send_bits_uplink(s, tst_packet.tiles[1].get_bits())
+    time.sleep(RX_WAIT)
+    rx = _receive_downlink(s)
+    if rx: 
+        print(rx)
+    time.sleep(TX_WAIT)
+
+    print("Sending 3")
+    #s.send(tst_packet.tiles[2].get_bits().tobytes())
+    _send_bits_uplink(s, tst_packet.tiles[2].get_bits())
+    time.sleep(RX_WAIT)
+    rx = _receive_downlink(s)
+    if rx: 
+        print(rx)
+    time.sleep(TX_WAIT)
+
+    print("Sending 4")
+    _send_bits_uplink(s, tst_packet.tiles[3].get_bits())
+    #s.send(tst_packet.tiles[3].get_bits().tobytes())
+    time.sleep(RX_WAIT)
+    rx = _receive_downlink(s)
+    if rx: 
+        print(rx)
+    time.sleep(TX_WAIT)
+
+    print("Sending 5")
+    _send_bits_uplink(s, tst_packet.tiles[4].get_bits())
+    #s.send(tst_packet.tiles[4].get_bits().tobytes())
+    time.sleep(RX_WAIT)
+    rx = _receive_downlink(s)
+    if rx: 
+        print(rx)
+
+    '''
     print('main(): Send OK')
     time.sleep(4)
     rx, port = s.recvfrom(256)
     if rx:
         print('Received: {}, on port {}'.format(rx, port))
-    time.sleep(6)
+    time.sleep(2)
+    '''
 except OSError as e:
     print('ERROR')
     print(e.args[0])

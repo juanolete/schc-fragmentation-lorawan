@@ -22,3 +22,5 @@ index = bmp_bits.len-1
 while index >= 0:
     print("BIT : ", bmp_bits[index])
     index -= 1
+
+print("Missing fragments: ", bmp.get_missing_fragments())
