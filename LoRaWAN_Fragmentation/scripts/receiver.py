@@ -6,6 +6,7 @@ import time
 from FREngine import FREngine
 from FRCommon import *
 from FRProfile import FRProfile
+from binascii import b2a_base64
 
 # TTN Connection
 app_id = "lorawan-fragmentation"
@@ -60,6 +61,13 @@ def uplink_callback(msg, client, frag_engine=fragmentation):
         print("## New fragment: ", fragment)
         frag_engine.receiving_buffer = fragment
         frag_engine.receive(mqtt_client, msg.dev_id)
+        if frag_engine.send_ack:
+            print("## Sending ACK with W={} and BMP={}".format(frag_engine.actual_window,
+                                                               frag_engine.actual_bitmap.bitmap))
+            message = frag_engine.actual_frag_engine.create_ack(frag_engine.ack_bitmap, frag_engine.actual_window)
+            print("ACK: ", message.hex)
+            mqtt_client.send(dev_id, b2a_base64(message.tobytes()).decode('ascii'), port=1, sched="last")
+            frag_engine.send_ack(False)
     return
 
 

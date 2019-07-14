@@ -5,6 +5,7 @@ from FRBitmap import FRBitmap as Bitmap
 from bitstring import Bits
 from math import ceil
 from binascii import b2a_base64
+from binascii import hexlify
 import FRCommon
 import time
 
@@ -38,8 +39,11 @@ class FREngine:
         # Only for receiver use
         self.receiving = False
         self.window = None
+        self.actual_frag_engine = None
         self.actual_window = None
         self.actual_bitmap = None
+        self.ack_bitmap = None
+        self.send_ack = False
         self.receiving_mode = None
         self.receiving_buffer = None
         return
@@ -155,6 +159,7 @@ class FREngine:
         fcn = profile.WINDOW_SIZE-1
         messages_sent = 0
         while fcn >= 0:
+            print("Creating fragment with W={} and FCN={}".format(window_number, fcn))
             fragment = None
             if tile_index >= tiles_number:
                 return False
@@ -163,6 +168,7 @@ class FREngine:
                 if not fragment_sent:
                     if tile_index == tiles_number-1:
                         print("## Creating an All-1 fragment")
+                        print("## MIC: ", self.packet.MIC)
                         fragment = fragment_engine.create_all_1_fragment(self.packet.tiles[tile_index],
                                                                          self.packet.MIC,
                                                                          window_number)
@@ -211,10 +217,11 @@ class FREngine:
         return
 
     def sender_receive(self, lora_socket, fragment_engine):
-        time.sleep(4)
+        time.sleep(FRCommon.RX_TIME)
         rx, port = lora_socket.recvfrom(256)
         if rx:
             print("## Received: {}, on port {}".format(rx, port))
+            print("ACK Received: ", hexlify(rx))
             message_type, headers = fragment_engine.sender_message_recovery(rx)
             return message_type, headers
         else:
@@ -239,15 +246,17 @@ class FREngine:
             self.msg_counter_receiver += 1
             rec_rid = headers[FRCommon.FRHeaders.R_ID].get_bits()
             rec_dtag = headers[FRCommon.FRHeaders.D_TAG].get_bits()
-            if (rec_rid.int != self.actual_id) or (rec_dtag.int != self.actual_dtag):
+            if (rec_rid.uint != self.actual_id) or (rec_dtag.uint != self.actual_dtag):
                 print("Rule ID or D Tag not expected")
                 return
-            rec_w = headers[FRCommon.FRHeaders.COMP_BMP].bet_bits()
+            rec_w = headers[FRCommon.FRHeaders.W].get_bits()
             rec_c = headers[FRCommon.FRHeaders.C].get_bits()
             rec_bmp_bits = headers[FRCommon.FRHeaders.COMP_BMP].get_bits()
             rec_bmp = Bitmap(profile.WINDOW_SIZE)
             rec_bmp.set_from_bits(rec_bmp_bits)
-            if (actual_window & FRCommon.lsb_mask[profile.w_size]) == rec_w.int:
+            expected_w = actual_window & FRCommon.lsb_mask[profile.w_size]
+            print("## Expected W={} ; Recover W={}".format(expected_w, rec_w.uint))
+            if (expected_w) == rec_w.uint:
                 if actual_window == windows_number - 1:
                     if rec_bmp.get_sent_fragments() > messages_sent:
                         # send a sender abort
@@ -256,7 +265,7 @@ class FREngine:
                         print("## Error in the transmission of last window")
                         print("## EXIT sending process")
                         state = "ERROR"
-                    elif not rec_c.int:
+                    elif not rec_c.uint:
                         # send a sender abort
                         message = fragment_engine.create_sender_abort()
                         self.send_fragment(lora_socket, message)
@@ -282,6 +291,8 @@ class FREngine:
         profile = self.id_profiles[self.actual_id]
         fragment_engine = FragmentEngine(profile, self.actual_id, self.actual_dtag)
         windows_number = self.compute_packet(self.actual_id, self.actual_dtag)
+        print("Packet to sent: ", hexlify(self.packet.packet))
+        print("Packet padding: ", hexlify(self.packet.packet_padding))
         actual_window = 0
         attempts = 0
         bmp = Bitmap(profile.WINDOW_SIZE)
@@ -312,23 +323,29 @@ class FREngine:
         return
 
     def receive(self, mqtt_client, dev_id):
+        print("")
         print("## Launching receive()")
         profile = self.id_profiles[self.actual_id]
         fragment_engine = FragmentEngine(profile, self.actual_id, self.actual_dtag)
         self.msg_counter_sender += 1
         if self.receiving_mode == FRCommon.FRModes.ALWAYS_ACK:
             message_type, headers = fragment_engine.receiver_message_recovery(self.receiving_buffer)
-            rec_rid = headers[FRCommon.FRHeaders.R_ID].get_bits()
-            rec_dtag = headers[FRCommon.FRHeaders.D_TAG].get_bits()
-            if (rec_rid.int != self.actual_id) or (rec_dtag.int != self.actual_dtag):
+            print("## -> Message type: ", message_type)
+            # Getting headers fields
+            rec_rid_bits = headers[FRCommon.FRHeaders.R_ID].get_bits()
+            rec_dtag_bits = headers[FRCommon.FRHeaders.D_TAG].get_bits()
+            rec_w_bits = headers[FRCommon.FRHeaders.W].get_bits()
+            rec_fcn_bits = headers[FRCommon.FRHeaders.FCN].get_bits()
+            rec_mic = headers[FRCommon.FRHeaders.MIC]
+            rec_payload = headers[FRCommon.FRHeaders.PAYLOAD]
+            # Check Rule ID and DTag values
+            if (rec_rid_bits.uint != self.actual_id) or (rec_dtag_bits.uint != self.actual_dtag):
                 print("Rule ID or D Tag not expected")
                 self.receiving_buffer = None
                 return
             print("## -> Rule ID and DTag correct")
-            rec_w = headers[FRCommon.FRHeaders.COMP_BMP].get_bits()
-            rec_fcn = headers[FRCommon.FRHeaders.FCN].get_bits()
-            rec_mic = headers[FRCommon.FRHeaders.MIC].get_bits()
-            rec_payload = headers[FRCommon.FRHeaders.PAYLOAD]
+            print("## -> W={} ; FCN={}".format(rec_w_bits.uint, rec_fcn_bits.uint))
+            # Check for messages types
             if message_type == FRCommon.FRMessages.SENDER_ABORT:
                 print("## Received a SENDER-ABORT message")
                 print("## EXIT receiving process")
@@ -337,67 +354,79 @@ class FREngine:
                 return
             elif message_type == FRCommon.FRMessages.ACK_REQUEST:
                 print("## Received a ACK-REQUEST message")
-                message = fragment_engine.create_ack(self.actual_bitmap, self.actual_window).tobyte()
-                mqtt_client.send(dev_id, b2a_base64(message).decode('ascii'), port=1, sched="last")
+                # message = fragment_engine.create_ack(self.actual_bitmap, self.actual_window).tobyte()
+                # mqtt_client.send(dev_id, b2a_base64(message).decode('ascii'), port=1, sched="last")
+                self.set_send_ack(True)
                 self.msg_counter_receiver += 1
                 self.receiving_buffer = None
                 return
             else:
                 print("## -> Receiving a Regular SCHC Fragment")
-                if (self.actual_window & FRCommon.lsb_mask[profile.w_size]) == rec_w.int:
+                # Check if W value is correct
+                if (self.actual_window & FRCommon.lsb_mask[profile.w_size]) == rec_w_bits.uint:
                     print("## -> Correct window number")
-                    self.actual_bitmap.set_bit_by_fcn(rec_fcn.int, True)
-                    self.window[rec_fcn.int] = rec_payload
                     if message_type == FRCommon.FRMessages.ALL1:
                         print("## -> Receiving All-1")
                         # ultimo fragmento de paquete
-                        if self.actual_bitmap.get_missing_fragments_until(rec_fcn.int) == 0:
-                            print("## -> Window complete, reassembly")
-                            # la ventana llego completamente
-                            message = fragment_engine.create_ack(self.actual_bitmap, self.actual_window).tobyte()
-                            mqtt_client.send(dev_id, b2a_base64(message).decode('ascii'), port=1, sched="last")
+                        new_packet = self.packet
+                        new_packet.add_window_to_packet(self.window)
+                        new_packet.tiles.append(rec_payload)
+                        new_packet.set_padding(0)
+                        new_packet.construct_from_tiles(new_packet.tiles)
+                        new_packet.calculate_mic(profile)
+                        print("## -> Calculated MIC: ", new_packet.MIC)
+                        if new_packet.MIC == rec_mic.get_bits().uint:
+                            print("## -> MIC succesfully calculated, reassembling")
+                            packet = new_packet
+                            self.actual_bitmap.set_last_unsent()
+                            self.ack_bitmap = self.actual_bitmap
+                            self.set_send_ack(True)
                             self.msg_counter_receiver += 1
-                            self.add_window_to_packet()
                             self.receiving_buffer = None
                             self.stop_receiving()
-                            self.reassembly()
                             print("PACKET REASSEMBLED")
-                            print("Packet: ", self.packet.packet)
+                            print("Packet: ", self.packet.packet.hex())
                             return
                         else:
                             print("## -> Window incomplete, expecting retransmission")
-                            # la ventana llego incompleta
-                            message = fragment_engine.create_ack(self.actual_bitmap, self.actual_window)
-                            mqtt_client.send(dev_id, b2a_base64(message).decode('ascii'), port=1, sched="last")
+                            self.ack_bitmap = self.actual_bitmap
+                            self.set_send_ack(True)
                             self.msg_counter_receiver += 1
                             self.receiving_buffer = None
-                    elif rec_fcn.int == 0:
+                    # Check if fragment is the last fragment of a window that is not the last window
+                    elif message_type == FRCommon.FRMessages.REGULAR and rec_fcn_bits.uint == 0:
                         print("## -> Receiving All-0")
-                        # ultimo fragmento de ventana
+                        self.actual_bitmap.set_bit_by_fcn(rec_fcn_bits.uint, True)
+                        self.window[rec_fcn_bits.uint] = rec_payload
+                        # Check if the window is complete
                         if self.actual_bitmap.get_missing_fragments() == 0:
-                            print("## -> Window complete, expecting new window")
-                            # ventana llego completa
-                            message = fragment_engine.create_ack(self.actual_bitmap, self.actual_window)
-                            mqtt_client.send(dev_id, b2a_base64(message).decode('ascii'), port=1, sched="last")
+                            self.ack_bitmap = self.actual_bitmap
+                            self.set_send_ack(True)
                             self.msg_counter_receiver += 1
                             self.actual_window += 1
-                            self.add_window_to_packet()
+                            self.packet.add_window_to_packet(self.window)
                             self.reset_window()
                             self.receiving_buffer = None
+                            print("## -> Window complete, expecting new window")
                             return
 
                         else:
                             print("## -> Window incomplete, expecting retransmission")
-                            # ventana llego imcompleta
-                            message = fragment_engine.create_ack(self.actual_bitmap, self.actual_window)
-                            mqtt_client.send(dev_id, b2a_base64(message).decode('ascii'), port=1, sched="last")
+                            self.ack_bitmap = self.actual_bitmap
+                            self.set_send_ack(True)
                             self.msg_counter_receiver += 1
                             self.receiving_buffer = None
                             return
+
                     else:
+                        self.actual_bitmap.set_bit_by_fcn(rec_fcn_bits.uint, True)
+                        self.window[rec_fcn_bits.uint] = rec_payload
                         print("## -> Saving fragment in window")
+                else:
+                    print("## -> Incorrect window value, ignoring fragment")
                 self.receiving_buffer = None
         print("## Quitting receive()")
+        print("")
         return
 
     def start_receiving(self, rule_id, d_tag):
@@ -407,18 +436,18 @@ class FREngine:
         self.msg_counter_sender = 0
         self.msg_counter_receiver = 0
         profile = self.id_profiles[self.actual_id]
+        self.actual_frag_engine = FragmentEngine(profile, self.actual_id, self.actual_dtag)
         self.receiving = True
         self.receiving_mode = profile.mode
         self.actual_window = 0
         self.receiving_buffer = None
         self.packet = Packet()
         self.reset_window()
-
         return
 
     def reset_window(self):
         profile = self.id_profiles[self.actual_id]
-        self.window = None * profile.WINDOW_SIZE
+        self.window = [None] * profile.WINDOW_SIZE
         self.actual_bitmap = Bitmap(profile.WINDOW_SIZE)
         return
 
@@ -426,14 +455,10 @@ class FREngine:
         self.receiving = False
         return
 
-    def add_window_to_packet(self):
-        index = len(self.window) - 1
-        while index >= 0:
-            if self.window[index] is not None:
-                self.packet.tiles.append(self.window[index])
-        return
-
     def reassembly(self):
         all_tiles = self.packet.tiles
         self.packet.construct_from_tiles(all_tiles)
         return
+
+    def set_send_ack(self, value):
+        self.send_ack = value

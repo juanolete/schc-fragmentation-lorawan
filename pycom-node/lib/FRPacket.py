@@ -13,7 +13,7 @@ class FRPacket:
 
     def __init__(self):
         self.packet = None
-        self.tiles = None
+        self.tiles = []
         self.packet_padding = None
         self.last_tile_padding = None
         self.MIC = None
@@ -94,5 +94,13 @@ class FRPacket:
             packet = packet + all_tiles[tiles_index].get_bits()
         self.packet = packet.tobytes()
         self.tiles = all_tiles
+        return
+
+    def add_window_to_packet(self, window):
+        index = len(window) - 1
+        while index >= 0:
+            if window[index] is not None:
+                self.tiles.append(window[index])
+            index -= 1
         return
 

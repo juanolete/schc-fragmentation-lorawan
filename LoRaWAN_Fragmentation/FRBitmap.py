@@ -79,3 +79,12 @@ class FRBitmap:
         for index in range(0, self.size):
             self.bitmap[index] = value & 0b1
             value = value >> 1
+
+    def set_last_unsent(self):
+        index = self.size-1
+        while index >= 0:
+            if not self.bitmap[index]:
+                self.bitmap[index] = 1
+                return
+            index -= 1
+        return
