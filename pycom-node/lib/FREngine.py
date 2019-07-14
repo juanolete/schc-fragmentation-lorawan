@@ -162,7 +162,7 @@ class FREngine:
             print("Creating fragment with W={} and FCN={}".format(window_number, fcn))
             fragment = None
             if tile_index >= tiles_number:
-                return False
+                return messages_sent
             else:
                 fragment_sent = window_bmp.bitmap[fcn]
                 if not fragment_sent:
@@ -257,8 +257,11 @@ class FREngine:
             expected_w = actual_window & FRCommon.lsb_mask[profile.w_size]
             print("## Expected W={} ; Recover W={}".format(expected_w, rec_w.uint))
             if (expected_w) == rec_w.uint:
+                print("## Recover BMP: {}".format(rec_bmp.bitmap))
                 if actual_window == windows_number - 1:
-                    if rec_bmp.get_sent_fragments() > messages_sent:
+                    messages_sent_bmp = rec_bmp.get_sent_fragments()
+                    print("Messages_sent={} ; Messages_sent_bmp={}".format(messages_sent,messages_sent_bmp))
+                    if messages_sent_bmp > messages_sent:
                         # send a sender abort
                         message = fragment_engine.create_sender_abort()
                         self.send_fragment(lora_socket, message)

@@ -162,7 +162,7 @@ class FREngine:
             print("Creating fragment with W={} and FCN={}".format(window_number, fcn))
             fragment = None
             if tile_index >= tiles_number:
-                return False
+                return messages_sent
             else:
                 fragment_sent = window_bmp.bitmap[fcn]
                 if not fragment_sent:
