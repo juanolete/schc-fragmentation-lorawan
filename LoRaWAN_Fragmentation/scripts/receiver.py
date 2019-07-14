@@ -1,9 +1,11 @@
 import ttn
 import binascii
 import time
-import FREngine
-import FRProfile as profile
 
+# Fragmentation imports
+from FREngine import FREngine
+from FRCommon import *
+from FRProfile import FRProfile
 
 # TTN Connection
 app_id = "lorawan-fragmentation"
@@ -14,25 +16,54 @@ mqtt_client = handler.data()
 mqtt_client.connect()
 
 # Fragmentation elements
+# Create profiles
+profile_0 = FRProfile()
+profile_0.enable_fragmentation()
+profile_0.select_fragmentation_mode(mode=FRModes.ALWAYS_ACK)
 
+profile_1 = FRProfile()
+profile_1.enable_fragmentation()
+profile_1.select_fragmentation_mode(mode=FRModes.ACK_ON_ERROR)
 
+profile_2 = FRProfile()
+profile_2.enable_fragmentation()
+profile_2.select_fragmentation_mode(mode=FRModes.NO_ACK)
+
+fragmentation = FREngine()
+fragmentation.add_profile(0, profile_0)
+fragmentation.add_profile(1, profile_1)
+fragmentation.add_profile(2, profile_2)
 
 
 # Receiver function
-def uplink_callback(msg, client):
-    data = bytes([1, 2, 3, 4])
-    time.sleep(1)
-    mqtt_client.send(dev_id, binascii.b2a_base64(data).decode('ascii'), port=1, sched="last")
-    # mqtt_client.send(dev_id, "AQIDBA==", port=1, sched="replace")
-    print("Receiverd uplink from ", msg.dev_id)
-    data_bytes = binascii.a2b_base64(msg.payload_raw)
-    print("Payload Bytes: ", data_bytes)
-    print("Payload Hex: ", binascii.hexlify(data_bytes))
-
+def uplink_callback(msg, client, frag_engine=fragmentation):
+    print("## Fragment received")
+    fragment = binascii.a2b_base64(msg.payload_raw)
+    if fragment == DUMMY_MESSAGE:
+        print("## -> Received DUMMY MSG")
+        return
+    if not frag_engine.receiving:
+        rid, fragment_bits_left, octet_index, octet_bits_left = take_field_from_fragment(3, fragment, len(fragment) * 8,
+                                                                                         0, 8)
+        rid_number = rid.get_bits().int
+        profile = frag_engine.id_profiles[rid_number]
+        dtag, fragment_bits_left, octet_index, octet_bits_left = take_field_from_fragment(profile.dtag_size, fragment,
+                                                                                          fragment_bits_left,
+                                                                                          octet_index, octet_bits_left)
+        dtag_number = dtag.get_bits().int
+        if dtag_number != frag_engine.actual_dtag:
+            print("## Starting receiving packet")
+            print("## New Rule ID: ", rid_number)
+            print("## New DTag: ", dtag_number)
+            frag_engine.start_receiving(rid_number, dtag_number)
+    if frag_engine.receiving:
+        print("## New fragment: ", fragment)
+        frag_engine.receiving_buffer = fragment
+        frag_engine.receive(mqtt_client, msg.dev_id)
+    return
 
 
 mqtt_client.set_uplink_callback(uplink_callback)
-
 
 while True:
     pass

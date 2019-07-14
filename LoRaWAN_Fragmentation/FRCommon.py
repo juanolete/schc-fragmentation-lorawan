@@ -3,7 +3,6 @@ from FRTile import FRTile as Tile
 lsb_mask = [0b0, 0b00000001, 0b00000011, 0b00000111, 0b00001111, 0b00011111, 0b00111111, 0b01111111, 0b11111111]
 DR_AUS915 = {
     # Mapping DR value with real Payload size in bytes
-    # The application need 13 bytes so it has to be subtracted to the
     0: 51,
     1: 51,
     2: 51,
@@ -18,6 +17,10 @@ DR_AUS915 = {
     12: 222,
     13: 222,
 }
+
+DUMMY_MESSAGE = bytes([0, 0, 0])
+TX_TIME = 4
+RX_TIME = 4
 
 
 def padding_bits(actual_len, l2_word_size):
@@ -68,6 +71,7 @@ def take_field_from_fragment(field_size: int, fragment: bytes,
     new_octet_bits_left = octet_bits_left
     return field, new_fragment_bits_left, new_octet_index, new_octet_bits_left
 
+
 class FRModes:
     NO_ACK = 'NO_ACK'
     ALWAYS_ACK = 'ALWAYS_ACK'
@@ -81,3 +85,18 @@ class FRMessages:
     ACK_REQUEST = 'ACK-REQUEST'
     SENDER_ABORT = 'SENDER-ABORT'
     RECEIVER_ABORT = 'RECEIVER-ABORT'
+
+
+class FRHeaders:
+    # Common headers for Sender and Receiver
+    R_ID = 0
+    D_TAG = 1
+    W = 2
+    # For Sender received messages
+    C = 3
+    COMP_BMP = 4
+    # For Receiver received messages
+    FCN = 3
+    MIC = 4
+    PAYLOAD = 5
+

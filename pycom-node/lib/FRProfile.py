@@ -32,7 +32,7 @@ class FRProfile:
 
         return
 
-    def select_fragmentation_mode(self, mode: Modes, inactivity_timer=12*3600, max_ack_requests=10,
+    def select_fragmentation_mode(self, mode, inactivity_timer=12*3600, max_ack_requests=10,
                                   window_size=7, penultimate_tile_smaller=False):
         self.mode = mode
         self.WINDOW_SIZE = window_size

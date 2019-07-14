@@ -44,16 +44,14 @@ class FRPacket:
 
     def get_tiles(self, profile: Profile, tile_len: int):
         if profile.mode == Modes.NO_ACK:
-            self.no_ack_get_tiles(tile_len, profile.l2_word_size)
+            return self.no_ack_get_tiles(tile_len, profile.l2_word_size)
         elif profile.mode == Modes.ALWAYS_ACK:
-            self.always_ack_get_tiles(tile_len, profile.l2_word_size)
+            return self.always_ack_get_tiles(tile_len, profile.l2_word_size)
         elif profile.mode == Modes.ACK_ON_ERROR:
-            self.ack_on_error_get_tiles(tile_len, profile.penultimate_tile_smaller, profile.l2_word_size)
-        return
+            return self.ack_on_error_get_tiles(tile_len, profile.penultimate_tile_smaller, profile.l2_word_size)
 
     def no_ack_get_tiles(self, tile_len, l2_size=8):
-        self.always_ack_get_tiles(tile_len, l2_size)
-        return
+        return self.always_ack_get_tiles(tile_len, l2_size)
 
     def ack_on_error_get_tiles(self, tile_len, penultimate_tile_small=False, l2_size=8):
         return

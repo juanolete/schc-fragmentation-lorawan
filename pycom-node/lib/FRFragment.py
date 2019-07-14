@@ -96,7 +96,7 @@ class FRFragmentEngine:
                 c = Bits(uint=1, length=1)
 
                 # Padding calculation
-                padding = None
+                padding = Bits(0)
                 pad_bits = padding_bits(header_size, self.l2_word_size)
                 if pad_bits > 0:
                     padding = Bits(uint=0, length=pad_bits)
@@ -330,3 +330,4 @@ class FRFragmentEngine:
 
         headers = [rid, dtag, w, fcn, mic, payload]
         return message_type, headers
+

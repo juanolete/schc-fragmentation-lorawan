@@ -12,6 +12,16 @@ import math
 from os import urandom
 
 # F/R imports
+from bitstring import Bits
+from FREngine import FREngine
+from FRBitmap import FRBitmap
+from FRCommon import *
+from FRFragment import FRFragmentEngine
+from FRPacket import FRPacket
+from FRProfile import FRProfile
+from FRTile import FRTile
+from uCRC32 import CRC32
+
 
 
 #######################################################################
@@ -20,26 +30,6 @@ from os import urandom
 LORA_NODE_DR = 4
 PACKET_LEN_BYTES = 300
 LORA_FREQUENCY = 915200000
-TX_WAIT = 10
-RX_WAIT = 4
-MSG_DUMMY = bytes([1])
-#######################################################################
-# Functions
-#######################################################################
-
-def _send_request_downlink(socket: socket)
-    print("## Sending dummy msg")
-    socket.send(MSG_DUMMY)
-
-def _send_bits_uplink(socket: socket, data: Bits): 
-    print("## Sending msg: ", data.hex)
-    socket.send(data.tobytes())
-
-def _receive_downlink(socket: socket):
-    rx, port = socket.recvfrom(256)
-    if rx:
-        print("Received: {}, on port {}".format(rx,port))
-    return rx
 
 #######################################################################
 # LoRaWAN Initialization
@@ -79,19 +69,11 @@ lora_socket = socket.socket(socket.AF_LORA, socket.SOCK_RAW)
 # set the LoRaWAN data rate
 lora_socket.setsockopt(socket.SOL_LORA, socket.SO_DR, LORA_NODE_DR)
 
+lora_socket.setblocking(False)
+
 #######################################################################
 # Packet Creator
 #######################################################################
-
-from FREngine import FREngine
-from FRBitmap import FRBitmap
-from FRCommon import *
-from FRFragment import FRFragmentEngine
-from FRPacket import FRPacket
-from FRProfile import FRProfile
-from FRTile import FRTile
-from uCRC32 import CRC32
-
 
 # Select Rule ID, DTag and create packet
 rule_id = 0
@@ -117,7 +99,9 @@ fragmentation.add_profile(1, profile_1)
 fragmentation.add_profile(2, profile_2)
 
 fragmentation.initialize(data_rate=LORA_NODE_DR, packet=packet)
+fragmentation.set_rule_id(0)
 
+fragmentation._send_packet_always_ack(lora_socket)
 
 # Get Tile length
 # Get tiles
@@ -135,3 +119,13 @@ fragmentation.initialize(data_rate=LORA_NODE_DR, packet=packet)
         # envio fragmentos faltantes
         # envio dummy 
         # recibo ACK
+
+# Select window Size
+
+
+    
+
+
+
+
+
