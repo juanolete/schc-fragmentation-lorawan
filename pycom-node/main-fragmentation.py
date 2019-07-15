@@ -72,13 +72,8 @@ lora_socket.setsockopt(socket.SOL_LORA, socket.SO_DR, LORA_NODE_DR)
 lora_socket.setblocking(False)
 
 #######################################################################
-# Packet Creator
+# Packet Sending
 #######################################################################
-
-# Select Rule ID, DTag and create packet
-rule_id = 0
-d_tag = 0
-packet = urandom(PACKET_LEN_BYTES)
 
 # Create profiles
 profile_0 = FRProfile()
@@ -98,30 +93,35 @@ fragmentation.add_profile(0, profile_0)
 fragmentation.add_profile(1, profile_1)
 fragmentation.add_profile(2, profile_2)
 
-fragmentation.initialize(data_rate=LORA_NODE_DR, packet=packet)
+# Setting DR and Rule
+fragmentation.initialize(data_rate=LORA_NODE_DR)
 fragmentation.set_rule_id(0)
 
+# Packet creation
+packet_1 = urandom(300)
+packet_2 = urandom(300)
+packet_3 = urandom(300)
+packet_4 = urandom(300)
+
+# Send packet 1
+print(" ")
+fragmentation.set_packet(packet_1)
 fragmentation._send_packet_always_ack(lora_socket)
+print(" ")
 
-# Get Tile length
-# Get tiles
-# Get fragments
+'''
+# Send packet 2
+print(" ")
+fragmentation.set_packet(packet_2)
+fragmentation._send_packet_always_ack(lora_socket)
+print(" ")
 
-# AHORA TENGO TODOS LOS FRAGMENTOS EN fragments = []
-# tengo window size
-
-# envio window
-# envio dummy
-# recibo ACK
-    # Si ACK regular:
-        # tomo bitmap
-        # veo en Bitmap los fragmentos faltantes
-        # envio fragmentos faltantes
-        # envio dummy 
-        # recibo ACK
-
-# Select window Size
-
+# Send packet 3
+print(" ")
+fragmentation.set_packet(packet_3)
+fragmentation._send_packet_always_ack(lora_socket)
+print(" ")
+'''
 
     
 

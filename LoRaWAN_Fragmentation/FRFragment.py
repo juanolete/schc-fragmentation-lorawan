@@ -25,7 +25,7 @@ class FRFragmentEngine:
         rid = Bits(uint=self.rule_id, length=self.rule_id_size)
         dtag = Bits(0)
         if self.dtag_size > 0:
-            dtag = Bits(uint=self.dtag, length=self.dtag_size)
+            dtag = Bits(uint=self.dtag & lsb_mask[self.dtag_size], length=self.dtag_size)
         w = Bits(0)
         if self.use_windows:
             w = Bits(uint=(window & lsb_mask[self.w_size]), length=self.w_size)
@@ -43,7 +43,7 @@ class FRFragmentEngine:
         rid = Bits(uint=self.rule_id, length=self.rule_id_size)
         dtag = Bits(0)
         if self.dtag_size > 0:
-            dtag = Bits(uint=self.dtag, length=self.dtag_size)
+            dtag = Bits(uint=self.dtag & lsb_mask[self.dtag_size], length=self.dtag_size)
         w = Bits(0)
         w_size = 0
         if self.use_windows:
@@ -62,18 +62,18 @@ class FRFragmentEngine:
         return fragment
 
     # Create SCHC ACK
-    def create_ack(self, bitmap: Bitmap, window=0):
+    def create_ack(self, bitmap: Bitmap, c_bit=0, window=0):
         rid = Bits(uint=self.rule_id, length=self.rule_id_size)
         dtag = Bits(0)
         if self.dtag_size > 0:
-            dtag = Bits(uint=self.dtag, length=self.dtag_size)
+            dtag = Bits(uint=self.dtag & lsb_mask[self.dtag_size], length=self.dtag_size)
         header_size = self.rule_id_size + self.dtag_size + 1
         if self.use_windows:
             w = Bits(uint=window & lsb_mask[self.w_size], length=self.w_size)
             header_size += self.w_size
             # Calculate C bit and Compressed Bitmap
-            if bitmap.get_value() != lsb_mask[self.WINDOW_SIZE]:  # Si Bitmap != 0b111...1
-                c = Bits(uint=0, length=1)
+            if c_bit == 0:
+                c = Bits(uint=c_bit, length=1)
                 padding = Bits(0)
                 pad_bits = padding_bits(header_size, self.l2_word_size)
                 if pad_bits > bitmap.size:
@@ -93,8 +93,7 @@ class FRFragmentEngine:
                 return fragment
 
             else:
-                c = Bits(uint=1, length=1)
-
+                c = Bits(uint=c_bit, length=1)
                 # Padding calculation
                 padding = Bits(0)
                 pad_bits = padding_bits(header_size, self.l2_word_size)
@@ -113,7 +112,7 @@ class FRFragmentEngine:
         rid = Bits(uint=self.rule_id, length=self.rule_id_size)
         dtag = Bits(0)
         if self.dtag_size > 0:
-            dtag = Bits(uint=self.dtag, length=self.dtag_size)
+            dtag = Bits(uint=self.dtag & lsb_mask[self.dtag_size], length=self.dtag_size)
         w = Bits(0)
         w_size = 0
         if self.use_windows:
@@ -137,7 +136,7 @@ class FRFragmentEngine:
         rid = Bits(uint=self.rule_id, length=self.rule_id_size)
         dtag = Bits(0)
         if self.dtag_size > 0:
-            dtag = Bits(uint=self.dtag, length=self.dtag_size)
+            dtag = Bits(uint=self.dtag & lsb_mask[self.dtag_size], length=self.dtag_size)
         w = Bits(0)
         w_size = 0
         if self.use_windows:
@@ -160,7 +159,7 @@ class FRFragmentEngine:
         rid = Bits(uint=self.rule_id, length=self.rule_id_size)
         dtag = Bits(0)
         if self.dtag_size > 0:
-            dtag = Bits(uint=self.dtag, length=self.dtag_size)
+            dtag = Bits(uint=self.dtag & lsb_mask[self.dtag_size], length=self.dtag_size)
         w = Bits(0)
         w_size = 0
         if self.use_windows:

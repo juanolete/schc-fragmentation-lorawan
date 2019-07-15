@@ -40,7 +40,12 @@ print(message_type)
 
 print("## Prueba para Sender")
 bmp = Bitmap(profile.WINDOW_SIZE)
-ack = fragment_engine.create_ack(bmp)
+bmp.set_bit_by_fcn(0, True)
+bmp.set_bit_by_fcn(1, True)
+bmp.set_bit_by_fcn(2, True)
+bmp.set_bit_by_fcn(3, True)
+ack = fragment_engine.create_ack(bmp, 0, 0)
+print(ack.hex)
 receiver_abort = fragment_engine.create_receiver_abort()
 
 message_type, headers = fragment_engine.sender_message_recovery(ack.tobytes())

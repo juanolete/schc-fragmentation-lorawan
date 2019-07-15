@@ -23,6 +23,10 @@ class FRPacket:
         self.packet = packet
         return
 
+    def set_tiles(self, tiles):
+        self.tiles = tiles.copy()
+        return
+
     def get_packet(self):
         return self.packet
 

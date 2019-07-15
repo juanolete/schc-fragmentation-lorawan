@@ -5,6 +5,17 @@ import struct
 import time
 from os import urandom
 
+# F/R imports
+from bitstring import Bits
+from FREngine import FREngine
+from FRBitmap import FRBitmap
+from FRCommon import *
+from FRFragment import FRFragmentEngine
+from FRPacket import FRPacket
+from FRProfile import FRProfile
+from FRTile import FRTile
+from uCRC32 import CRC32
+
 
 # LORA_FREQUENCY = 916800000
 LORA_FREQUENCY = 915200000
@@ -83,101 +94,11 @@ s.setblocking(False)
 time.sleep(4)
 
 ##############################################################################
-# Preparing Data
 
-from bitstring import Bits
-from FRPacket import FRPacket as Packet
-packet_len = 1380  # bytes
-tile_len = 216 * 8
-tst_packet = Packet()
-tst_packet.random_generate(packet_len)
-tst_packet.always_ack_get_tiles(tile_len)
+fragmentation = FREngine()
+fragmentation.initialize(data_rate=LORA_NODE_DR)
 
-message_bits = tst_packet.tiles[0].get_bits()
-print("Message: ", message_bits.hex)
-print("\n")
-#############################################################################################
+while True:
+    fragmentation._send_dummy_message(lora_socket)
+    time.sleep(FRCommon.TX_TIME)
 
-# send some data
-
-def _send_bits_uplink(socket: socket, data: Bits): 
-    print("## Sending msg: ", data.hex)
-    socket.send(data.tobytes())
-
-def _receive_downlink(socket: socket):
-    rx, port = socket.recvfrom(256)
-    if rx:
-        print("Received: {}, on port {}".format(rx,port))
-    return rx
-
-TX_WAIT = 5
-RX_WAIT = 4
-
-try:
-    # s.send(bytes([0x01, 0x02, 0x03]))
-    print("Message: ", message_bits.tobytes())
-    print("\n")
-
-    print("Sending 1")
-
-    _send_bits_uplink(s, message_bits)
-    #s.send(message_bits.tobytes())
-    time.sleep(RX_WAIT)
-    rx = _receive_downlink(s)
-    if rx: 
-        print(rx)
-    time.sleep(TX_WAIT)
-
-    print("Sending 2")
-    #s.send(tst_packet.tiles[1].get_bits().tobytes())
-    _send_bits_uplink(s, tst_packet.tiles[1].get_bits())
-    time.sleep(RX_WAIT)
-    rx = _receive_downlink(s)
-    if rx: 
-        print(rx)
-    time.sleep(TX_WAIT)
-
-    print("Sending 3")
-    #s.send(tst_packet.tiles[2].get_bits().tobytes())
-    _send_bits_uplink(s, tst_packet.tiles[2].get_bits())
-    time.sleep(RX_WAIT)
-    rx = _receive_downlink(s)
-    if rx: 
-        print(rx)
-    time.sleep(TX_WAIT)
-
-    print("Sending 4")
-    _send_bits_uplink(s, tst_packet.tiles[3].get_bits())
-    #s.send(tst_packet.tiles[3].get_bits().tobytes())
-    time.sleep(RX_WAIT)
-    rx = _receive_downlink(s)
-    if rx: 
-        print(rx)
-    time.sleep(TX_WAIT)
-
-    print("Sending 5")
-    _send_bits_uplink(s, tst_packet.tiles[4].get_bits())
-    #s.send(tst_packet.tiles[4].get_bits().tobytes())
-    time.sleep(RX_WAIT)
-    rx = _receive_downlink(s)
-    if rx: 
-        print(rx)
-
-    '''
-    print('main(): Send OK')
-    time.sleep(4)
-    rx, port = s.recvfrom(256)
-    if rx:
-        print('Received: {}, on port {}'.format(rx, port))
-    time.sleep(2)
-    '''
-except OSError as e:
-    print('ERROR')
-    print(e.args[0])
-    # if e.args[0] == 11:
-'''
-# get any data received (if any...)
-data = s.recv(256)
-print(data)
-'''
-print("END")

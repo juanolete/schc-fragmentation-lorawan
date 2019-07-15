@@ -28,17 +28,13 @@ print("Missing fragments: ", bmp.get_missing_fragments())
 new_bmp = Bitmap(window_size)
 new_bmp.set_bit_by_fcn(6, True)
 #new_bmp.set_bit_by_fcn(5, True)
-# new_bmp.set_bit_by_fcn(4, True)
+new_bmp.set_bit_by_fcn(4, True)
 
 
 null_bmp = Bitmap(0)
 
 print(bmp.equals(null_bmp))
-
-bits = Bits(bin="1001")
-bmp.set_from_bits(bits)
-
-new_bmp.set_last_unsent()
 print("New bmp: ", new_bmp.bitmap)
-
-
+new_bmp.set_last_unsent()
+new_bmp.unset_last_sent()
+print("New bmp: ", new_bmp.bitmap)

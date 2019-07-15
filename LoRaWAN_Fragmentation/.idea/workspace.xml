@@ -5,7 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bcdb7568-f589-44b3-a57c-c95212c96212" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../pycom-node/lib/FREngine.py" beforeDir="false" afterPath="$PROJECT_DIR$/../pycom-node/lib/FREngine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FRBitmap.py" beforeDir="false" afterPath="$PROJECT_DIR$/FRBitmap.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FREngine.py" beforeDir="false" afterPath="$PROJECT_DIR$/FREngine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FRFragment.py" beforeDir="false" afterPath="$PROJECT_DIR$/FRFragment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FRPacket.py" beforeDir="false" afterPath="$PROJECT_DIR$/FRPacket.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/receiver.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/receiver.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/tst-Bitmap.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/tst-Bitmap.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/tst-Messages.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/tst-Messages.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,14 +35,14 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.41621983">
+    <splitter split-orientation="horizontal" split-proportion="0.46947673">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/scripts/receiver.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="302">
-                  <caret line="70" column="10" lean-forward="true" selection-start-line="70" selection-start-column="10" selection-end-line="70" selection-end-column="10" />
+                <state relative-caret-position="187">
+                  <caret line="79" column="63" selection-start-line="79" selection-start-column="63" selection-end-line="79" selection-end-column="63" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
                   </folding>
@@ -46,8 +53,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/FRBitmap.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="142">
-                  <caret line="83" column="27" selection-start-line="83" selection-start-column="27" selection-end-line="83" selection-end-column="27" />
+                <state relative-caret-position="429">
+                  <caret line="106" column="14" lean-forward="true" selection-start-line="106" selection-start-column="14" selection-end-line="106" selection-end-column="14" />
                 </state>
               </provider>
             </entry>
@@ -55,8 +62,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/FRCommon.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-781">
-                  <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
+                <state relative-caret-position="17">
+                  <caret line="27" selection-start-line="27" selection-end-line="27" />
                 </state>
               </provider>
             </entry>
@@ -68,8 +75,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/FRPacket.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="255">
-                  <caret line="15" column="23" lean-forward="true" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
+                <state relative-caret-position="170">
+                  <caret line="26" column="33" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
                   <folding>
                     <element signature="e#0#11#0" expanded="true" />
                   </folding>
@@ -89,8 +96,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/test/tst-Bitmap.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="74">
-                  <caret line="30" column="2" selection-start-line="30" selection-start-column="2" selection-end-line="30" selection-end-column="2" />
+                <state relative-caret-position="418">
+                  <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
                   <folding>
                     <element signature="e#0#39#0" expanded="true" />
                   </folding>
@@ -101,17 +108,18 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/FREngine.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="95">
-                  <caret line="164" column="36" selection-start-line="164" selection-start-column="36" selection-end-line="164" selection-end-column="36" />
+                <state relative-caret-position="-993">
+                  <caret line="381" column="48" selection-start-line="381" selection-start-column="48" selection-end-line="381" selection-end-column="48" />
                   <folding>
                     <element signature="e#0#39#0" expanded="true" />
-                    <element signature="e#1342#1712#0" />
-                    <element signature="e#1755#1789#0" />
-                    <element signature="e#1840#2193#0" />
-                    <element signature="e#6016#6142#0" />
-                    <element signature="e#6181#6230#0" />
-                    <element signature="e#22722#22759#0" />
-                    <element signature="e#23022#23118#0" />
+                    <element signature="e#1713#1747#0" />
+                    <element signature="e#2222#2578#0" />
+                    <element signature="e#2681#4492#0" />
+                    <element signature="e#4568#4694#0" />
+                    <element signature="e#4733#4782#0" />
+                    <element signature="e#4828#5014#0" />
+                    <element signature="e#7519#8280#0" />
+                    <element signature="e#20573#20738#0" />
                   </folding>
                 </state>
               </provider>
@@ -129,12 +137,22 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/FRFragment.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="494">
-                  <caret line="330" column="28" lean-forward="true" selection-start-line="330" selection-start-column="28" selection-end-line="330" selection-end-column="28" />
+                <state relative-caret-position="530">
+                  <caret line="79" column="45" selection-start-line="79" selection-start-column="45" selection-end-line="79" selection-end-column="45" />
                   <folding>
                     <element signature="e#0#26#0" expanded="true" />
-                    <element signature="e#790#1308#0" />
-                    <element signature="e#1430#2211#0" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/test/tst-Messages.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="190">
+                  <caret line="47" column="13" selection-start-line="47" selection-start-column="13" selection-end-line="47" selection-end-column="13" />
+                  <folding>
+                    <element signature="e#0#57#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -153,13 +171,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>add_</find>
-      <find>Tile</find>
-      <find>L2</find>
-      <find>profile</find>
-      <find>profile_r</find>
-      <find>fragment_engine</find>
-      <find>dtag</find>
       <find>Constant</find>
       <find>FRConstants</find>
       <find>w</find>
@@ -169,12 +180,27 @@
       <find>dev</find>
       <find>Rule</find>
       <find>compute</find>
-      <find>receive</find>
       <find>int</find>
       <find>.int</find>
       <find>mqtt_client</find>
       <find>Received</find>
       <find>time</find>
+      <find>ack</find>
+      <find>C</find>
+      <find>waiting</find>
+      <find>receive</find>
+      <find>reassembly</find>
+      <find>add_window_to_packet</find>
+      <find>self.packet</find>
+      <find>unset</find>
+      <find>msg_counter_receiver</find>
+      <find>_send</find>
+      <find>send_frag</find>
+      <find>create_ack_req</find>
+      <find>bits_counter_sender</find>
+      <find>send_fragment</find>
+      <find>msg_counter_sender</find>
+      <find>bits_counter_receiver</find>
     </findStrings>
     <replaceStrings>
       <replace>profile_r</replace>
@@ -212,21 +238,21 @@
         <option value="$PROJECT_DIR$/FRProfile.py" />
         <option value="$PROJECT_DIR$/test/tst-fragmentation.py" />
         <option value="$PROJECT_DIR$/scripts/sender.py" />
-        <option value="$PROJECT_DIR$/test/tst-Messages.py" />
-        <option value="$PROJECT_DIR$/FRFragment.py" />
         <option value="$PROJECT_DIR$/FRCommon.py" />
-        <option value="$PROJECT_DIR$/FRPacket.py" />
         <option value="$PROJECT_DIR$/FRBitmap.py" />
         <option value="$PROJECT_DIR$/test/tst-Bitmap.py" />
-        <option value="$PROJECT_DIR$/scripts/receiver.py" />
+        <option value="$PROJECT_DIR$/FRFragment.py" />
+        <option value="$PROJECT_DIR$/test/tst-Messages.py" />
+        <option value="$PROJECT_DIR$/FRPacket.py" />
         <option value="$PROJECT_DIR$/FREngine.py" />
+        <option value="$PROJECT_DIR$/scripts/receiver.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="2872" />
-    <option name="y" value="-344" />
-    <option name="width" value="977" />
+    <option name="x" value="2346" />
+    <option name="y" value="-362" />
+    <option name="width" value="978" />
     <option name="height" value="1038" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -406,8 +432,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.receiver" />
-        <item itemvalue="Python.tst-Bitmap" />
         <item itemvalue="Python.tst-Messages" />
+        <item itemvalue="Python.tst-Bitmap" />
         <item itemvalue="Python.sender" />
         <item itemvalue="Python.tst-fragmentation" />
       </list>
@@ -445,19 +471,19 @@
       <workItem from="1562611889909" duration="11302000" />
       <workItem from="1562731829224" duration="4080000" />
       <workItem from="1562772506821" duration="48718000" />
-      <workItem from="1563049113580" duration="37042000" />
+      <workItem from="1563049113580" duration="37102000" />
+      <workItem from="1563128885662" duration="30275000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="247644000" />
+    <option name="totallyTimeSpent" value="277979000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1913" y="-351" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.4990099" weight="0.05227882" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.4990099" visible="true" weight="0.077747986" />
       <window_info id="Structure" order="2" sideWeight="0.5009901" side_tool="true" weight="0.15951742" />
       <window_info anchor="bottom" id="Database Changes" order="0" />
       <window_info anchor="bottom" id="Terminal" order="1" weight="0.32956153" />
@@ -467,7 +493,7 @@
       <window_info anchor="bottom" id="Docker" order="5" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="6" />
       <window_info anchor="bottom" id="Find" order="7" />
-      <window_info active="true" anchor="bottom" id="Run" order="8" visible="true" weight="0.41442716" />
+      <window_info active="true" anchor="bottom" id="Run" order="8" visible="true" weight="0.50777936" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="11" />
@@ -531,15 +557,15 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/LoRaWAN_Fragmentation$tst_Bitmap.coverage" NAME="tst-Bitmap Coverage Results" MODIFIED="1563089814040" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
-    <SUITE FILE_PATH="coverage/LoRaWAN_Fragmentation$tst_Messages.coverage" NAME="tst-Messages Coverage Results" MODIFIED="1562790381034" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
+    <SUITE FILE_PATH="coverage/LoRaWAN_Fragmentation$tst_Bitmap.coverage" NAME="tst-Bitmap Coverage Results" MODIFIED="1563134583506" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
+    <SUITE FILE_PATH="coverage/LoRaWAN_Fragmentation$tst_Messages.coverage" NAME="tst-Messages Coverage Results" MODIFIED="1563153604833" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/LoRaWAN_Fragmentation$tst_CRC32.coverage" NAME="tst-CRC32 Coverage Results" MODIFIED="1561783450302" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/LoRaWAN_Fragmentation$tst_Packet.coverage" NAME="tst-Packet Coverage Results" MODIFIED="1561786081396" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/LoRaWAN_Fragmentation$tst_fragmentation.coverage" NAME="tst-fragmentation Coverage Results" MODIFIED="1562624934593" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/LoRaWAN_Fragmentation$test.coverage" NAME="test Coverage Results" MODIFIED="1561255974282" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/LoRaWAN_Fragmentation$tst_FieldRecovery.coverage" NAME="tst-FieldRecovery Coverage Results" MODIFIED="1561678912635" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/LoRaWAN_Fragmentation$sender.coverage" NAME="sender Coverage Results" MODIFIED="1562779979456" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
-    <SUITE FILE_PATH="coverage/LoRaWAN_Fragmentation$receiver.coverage" NAME="receiver Coverage Results" MODIFIED="1563091856740" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/LoRaWAN_Fragmentation$receiver.coverage" NAME="receiver Coverage Results" MODIFIED="1563166749880" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
@@ -658,30 +684,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/sender.py" />
+    <entry file="file://$PROJECT_DIR$/FRCommon.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/FRBitmap.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="429">
+          <caret line="106" column="14" lean-forward="true" selection-start-line="106" selection-start-column="14" selection-end-line="106" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/test/tst-Messages.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="129">
-          <caret line="35" column="23" lean-forward="true" selection-start-line="35" selection-start-column="23" selection-end-line="35" selection-end-column="23" />
+        <state relative-caret-position="190">
+          <caret line="47" column="13" selection-start-line="47" selection-start-column="13" selection-end-line="47" selection-end-column="13" />
           <folding>
             <element signature="e#0#57#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/sender.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" column="8" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#42#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/FRCommon.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-781">
-          <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
         </state>
       </provider>
     </entry>
@@ -689,18 +713,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="15" column="18" selection-start-line="15" selection-start-column="12" selection-end-line="15" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/FRFragment.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="330" column="28" lean-forward="true" selection-start-line="330" selection-start-column="28" selection-end-line="330" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-            <element signature="e#790#1308#0" />
-            <element signature="e#1430#2211#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -713,35 +725,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/FRPacket.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="23" lean-forward="true" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
+        <state relative-caret-position="170">
+          <caret line="26" column="33" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/FRBitmap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="83" column="27" selection-start-line="83" selection-start-column="27" selection-end-line="83" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/tst-Bitmap.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="74">
-          <caret line="30" column="2" selection-start-line="30" selection-start-column="2" selection-end-line="30" selection-end-column="2" />
+        <state relative-caret-position="418">
+          <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/FRFragment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="530">
+          <caret line="79" column="45" selection-start-line="79" selection-start-column="45" selection-end-line="79" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/receiver.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="70" column="10" lean-forward="true" selection-start-line="70" selection-start-column="10" selection-end-line="70" selection-end-column="10" />
+        <state relative-caret-position="187">
+          <caret line="79" column="63" selection-start-line="79" selection-start-column="63" selection-end-line="79" selection-end-column="63" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
@@ -750,17 +765,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/FREngine.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="164" column="36" selection-start-line="164" selection-start-column="36" selection-end-line="164" selection-end-column="36" />
+        <state relative-caret-position="-993">
+          <caret line="381" column="48" selection-start-line="381" selection-start-column="48" selection-end-line="381" selection-end-column="48" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
-            <element signature="e#1342#1712#0" />
-            <element signature="e#1755#1789#0" />
-            <element signature="e#1840#2193#0" />
-            <element signature="e#6016#6142#0" />
-            <element signature="e#6181#6230#0" />
-            <element signature="e#22722#22759#0" />
-            <element signature="e#23022#23118#0" />
+            <element signature="e#1713#1747#0" />
+            <element signature="e#2222#2578#0" />
+            <element signature="e#2681#4492#0" />
+            <element signature="e#4568#4694#0" />
+            <element signature="e#4733#4782#0" />
+            <element signature="e#4828#5014#0" />
+            <element signature="e#7519#8280#0" />
+            <element signature="e#20573#20738#0" />
           </folding>
         </state>
       </provider>

@@ -81,10 +81,27 @@ class FRBitmap:
             value = value >> 1
 
     def set_last_unsent(self):
-        index = self.size-1
-        while index >= 0:
-            if not self.bitmap[index]:
-                self.bitmap[index] = 1
+        sent = self.get_sent_fragments()
+        if sent == self.size:
+            return
+        else:
+            index = self.size-1
+            counter = 0
+            while index >= 0:
+                if not self.bitmap[index]:
+                    if counter == sent:
+                        self.bitmap[index] = 1
+                        return
+                else:
+                    counter += 1
+                index -= 1
+            return
+
+    def unset_last_sent(self):
+        index = 0
+        while index < self.size:
+            if self.bitmap[index]:
+                self.bitmap[index] = 0
                 return
-            index -= 1
+            index += 1
         return
