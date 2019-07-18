@@ -106,7 +106,7 @@ packet_4 = urandom(300)
 # Send packet 1
 print(" ")
 fragmentation.set_packet(packet_1)
-fragmentation._send_packet_always_ack(lora_socket)
+fragmentation.send(lora_socket)
 print(" ")
 
 '''

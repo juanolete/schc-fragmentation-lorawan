@@ -6,13 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="bcdb7568-f589-44b3-a57c-c95212c96212" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FRBitmap.py" beforeDir="false" afterPath="$PROJECT_DIR$/FRBitmap.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FREngine.py" beforeDir="false" afterPath="$PROJECT_DIR$/FREngine.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FRFragment.py" beforeDir="false" afterPath="$PROJECT_DIR$/FRFragment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FRPacket.py" beforeDir="false" afterPath="$PROJECT_DIR$/FRPacket.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/receiver.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/receiver.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/tst-Bitmap.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/tst-Bitmap.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/tst-Messages.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/tst-Messages.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pycom-lorawan-gateway/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/../pycom-lorawan-gateway/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pycom-node/main-fragmentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/../pycom-node/main-fragmentation.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -35,14 +30,14 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.46947673">
+    <splitter split-orientation="horizontal" split-proportion="0.73323286">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/scripts/receiver.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="187">
-                  <caret line="79" column="63" selection-start-line="79" selection-start-column="63" selection-end-line="79" selection-end-column="63" />
+                <state relative-caret-position="544">
+                  <caret line="83" column="47" lean-forward="true" selection-start-line="83" selection-start-column="47" selection-end-line="83" selection-end-column="47" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
                   </folding>
@@ -53,8 +48,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/FRBitmap.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="429">
-                  <caret line="106" column="14" lean-forward="true" selection-start-line="106" selection-start-column="14" selection-end-line="106" selection-end-column="14" />
+                <state relative-caret-position="1802">
+                  <caret line="106" column="14" selection-start-line="106" selection-start-column="14" selection-end-line="106" selection-end-column="14" />
                 </state>
               </provider>
             </entry>
@@ -62,7 +57,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/FRCommon.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="17">
+                <state relative-caret-position="459">
                   <caret line="27" selection-start-line="27" selection-end-line="27" />
                 </state>
               </provider>
@@ -75,7 +70,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/FRPacket.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="170">
+                <state relative-caret-position="306">
                   <caret line="26" column="33" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
                   <folding>
                     <element signature="e#0#11#0" expanded="true" />
@@ -87,7 +82,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/FRProfile.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="272">
+                <state relative-caret-position="340">
                   <caret line="20" column="32" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
                 </state>
               </provider>
@@ -96,8 +91,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/test/tst-Bitmap.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="418">
-                  <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
+                <state relative-caret-position="629">
+                  <caret line="38" selection-start-line="38" selection-end-line="38" />
                   <folding>
                     <element signature="e#0#39#0" expanded="true" />
                   </folding>
@@ -108,18 +103,10 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/FREngine.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-993">
+                <state relative-caret-position="17">
                   <caret line="381" column="48" selection-start-line="381" selection-start-column="48" selection-end-line="381" selection-end-column="48" />
                   <folding>
                     <element signature="e#0#39#0" expanded="true" />
-                    <element signature="e#1713#1747#0" />
-                    <element signature="e#2222#2578#0" />
-                    <element signature="e#2681#4492#0" />
-                    <element signature="e#4568#4694#0" />
-                    <element signature="e#4733#4782#0" />
-                    <element signature="e#4828#5014#0" />
-                    <element signature="e#7519#8280#0" />
-                    <element signature="e#20573#20738#0" />
                   </folding>
                 </state>
               </provider>
@@ -137,7 +124,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/FRFragment.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="530">
+                <state relative-caret-position="1275">
                   <caret line="79" column="45" selection-start-line="79" selection-start-column="45" selection-end-line="79" selection-end-column="45" />
                   <folding>
                     <element signature="e#0#26#0" expanded="true" />
@@ -149,7 +136,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/test/tst-Messages.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="190">
+                <state relative-caret-position="731">
                   <caret line="47" column="13" selection-start-line="47" selection-start-column="13" selection-end-line="47" selection-end-column="13" />
                   <folding>
                     <element signature="e#0#57#0" expanded="true" />
@@ -250,10 +237,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="2346" />
-    <option name="y" value="-362" />
-    <option name="width" value="978" />
-    <option name="height" value="1038" />
+    <option name="x" value="600" />
+    <option name="y" value="-17" />
+    <option name="width" value="649" />
+    <option name="height" value="1039" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -263,7 +250,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -285,6 +271,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -472,18 +459,20 @@
       <workItem from="1562731829224" duration="4080000" />
       <workItem from="1562772506821" duration="48718000" />
       <workItem from="1563049113580" duration="37102000" />
-      <workItem from="1563128885662" duration="30275000" />
+      <workItem from="1563128885662" duration="30976000" />
+      <workItem from="1563204536990" duration="20987000" />
+      <workItem from="1563335786976" duration="3148000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="277979000" />
+    <option name="totallyTimeSpent" value="302815000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1913" y="-351" width="1550" height="838" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.4990099" visible="true" weight="0.077747986" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.4990099" visible="true" weight="0.11058981" />
       <window_info id="Structure" order="2" sideWeight="0.5009901" side_tool="true" weight="0.15951742" />
       <window_info anchor="bottom" id="Database Changes" order="0" />
       <window_info anchor="bottom" id="Terminal" order="1" weight="0.32956153" />
@@ -493,17 +482,17 @@
       <window_info anchor="bottom" id="Docker" order="5" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="6" />
       <window_info anchor="bottom" id="Find" order="7" />
-      <window_info active="true" anchor="bottom" id="Run" order="8" visible="true" weight="0.50777936" />
+      <window_info anchor="bottom" id="Run" order="8" weight="0.95708156" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="11" />
-      <window_info anchor="bottom" id="Debug" order="12" weight="0.55021214" />
+      <window_info anchor="bottom" id="Debug" order="12" weight="0.5493562" />
       <window_info anchor="right" id="Database" order="0" weight="0.3297587" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="1" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="SciView" order="2" weight="0.3297587" />
-      <window_info anchor="right" id="Ant Build" order="3" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="4" weight="0.25" />
-      <window_info anchor="right" x="0" y="0" width="337" height="638" id="Documentation" order="5" side_tool="true" weight="0.3297587" />
+      <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="3" weight="0.25" />
+      <window_info anchor="right" x="0" y="0" width="337" height="638" id="Documentation" order="4" side_tool="true" weight="0.3297587" />
+      <window_info anchor="right" id="SciView" order="5" weight="0.19369973" />
     </layout>
     <layout-to-restore>
       <window_info id="Favorites" order="0" side_tool="true" />
@@ -565,7 +554,7 @@
     <SUITE FILE_PATH="coverage/LoRaWAN_Fragmentation$test.coverage" NAME="test Coverage Results" MODIFIED="1561255974282" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/LoRaWAN_Fragmentation$tst_FieldRecovery.coverage" NAME="tst-FieldRecovery Coverage Results" MODIFIED="1561678912635" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/LoRaWAN_Fragmentation$sender.coverage" NAME="sender Coverage Results" MODIFIED="1562779979456" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
-    <SUITE FILE_PATH="coverage/LoRaWAN_Fragmentation$receiver.coverage" NAME="receiver Coverage Results" MODIFIED="1563166749880" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/LoRaWAN_Fragmentation$receiver.coverage" NAME="receiver Coverage Results" MODIFIED="1563229011728" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
@@ -685,26 +674,43 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/sender.py" />
+    <entry file="file://$PROJECT_DIR$/FRBitmap.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1802">
+          <caret line="106" column="14" selection-start-line="106" selection-start-column="14" selection-end-line="106" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/FRCommon.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
+        <state relative-caret-position="459">
           <caret line="27" selection-start-line="27" selection-end-line="27" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/FRBitmap.py">
+    <entry file="file://$PROJECT_DIR$/FRPacket.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="429">
-          <caret line="106" column="14" lean-forward="true" selection-start-line="106" selection-start-column="14" selection-end-line="106" selection-end-column="14" />
+        <state relative-caret-position="306">
+          <caret line="26" column="33" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/tst-Messages.py">
+    <entry file="file://$PROJECT_DIR$/FRProfile.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="47" column="13" selection-start-line="47" selection-start-column="13" selection-end-line="47" selection-end-column="13" />
+        <state relative-caret-position="340">
+          <caret line="20" column="32" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/tst-Bitmap.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="629">
+          <caret line="38" selection-start-line="38" selection-end-line="38" />
           <folding>
-            <element signature="e#0#57#0" expanded="true" />
+            <element signature="e#0#39#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -716,36 +722,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/FRProfile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="20" column="32" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/FRPacket.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="26" column="33" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/tst-Bitmap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/FRFragment.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="530">
+        <state relative-caret-position="1275">
           <caret line="79" column="45" selection-start-line="79" selection-start-column="45" selection-end-line="79" selection-end-column="45" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
@@ -753,30 +732,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/receiver.py">
+    <entry file="file://$PROJECT_DIR$/test/tst-Messages.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="79" column="63" selection-start-line="79" selection-start-column="63" selection-end-line="79" selection-end-column="63" />
+        <state relative-caret-position="731">
+          <caret line="47" column="13" selection-start-line="47" selection-start-column="13" selection-end-line="47" selection-end-column="13" />
           <folding>
-            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#0#57#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/FREngine.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-993">
+        <state relative-caret-position="17">
           <caret line="381" column="48" selection-start-line="381" selection-start-column="48" selection-end-line="381" selection-end-column="48" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
-            <element signature="e#1713#1747#0" />
-            <element signature="e#2222#2578#0" />
-            <element signature="e#2681#4492#0" />
-            <element signature="e#4568#4694#0" />
-            <element signature="e#4733#4782#0" />
-            <element signature="e#4828#5014#0" />
-            <element signature="e#7519#8280#0" />
-            <element signature="e#20573#20738#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/receiver.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="83" column="47" lean-forward="true" selection-start-line="83" selection-start-column="47" selection-end-line="83" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
